@@ -44,5 +44,3 @@ def ReportFileEdit(name,category):
             NameList.append(entry[0])  
             f.writelines(f'{name},{category},{location},{tstr.strftime("%X")},{dstr},{dstr.strftime("%B")},{dstr.strftime("%Y")}\n')
         pd.read_csv(os.path.join(BASE_DIR,'Recognize/Records/Records-{}.csv'.format(datetime.now().date()))).drop_duplicates(subset=['Name','Location'],keep='last')
-#ReportFileEdit('Sasin','Criminal')
-#print(BASE_DIR)
