@@ -1,0 +1,438 @@
+/* navbaarv smooth scroll effect */
+
+body{
+  scroll-behavior: smooth;
+  
+}
+
+
+/* float */
+#ace{
+    position: fixed;
+    left: 94%;
+    top: 90%;
+
+}
+/* navbar  */
+body {
+    /* background: #f5d9d5; */
+    font-family: "Nunito", sans-serif;
+  }
+  
+  /* .blurb h2 {
+   color: #EA1C2C;
+   font-weight: 100;
+   font-size: 2.5rem;
+  } */
+  
+  /* .blurb p {
+    color: #f498b8;
+    font-weight: 100;
+    font-size: 1.125rem;
+    line-height: 2;
+  } */
+  
+  /* .content {
+    margin-top: 100px;
+    margin-bottom: 100px;
+  } */
+  
+  #mainNavbar {
+    font-size: 1.5rem;
+    font-weight: 100;    
+  }
+  
+  #mainNavbar .nav-link {
+    color: white;
+  }
+  
+  #mainNavbar .nav-link:hover {
+    color: #EA1C2C;
+  }
+  
+  #mainNavbar .navbar-brand {
+    color: #EA1C2C;
+    font-size: 1.5rem;
+  }
+  
+  /* #headingGroup span {
+    color: #EA1C2C;
+  } */
+  /* 
+  #headingGroup h1 {
+    font-weight: 100;
+    font-size: 4rem;
+  } */
+  
+    /* @media (max-width: 1200px) {
+    #headingGroup h1 {
+        font-weight: 100;
+        font-size: 3rem;
+    }
+    .blurb h2 {
+        font-size: 2rem;
+    }
+  } */
+  .navbar.scrolled {
+    background: #222222;
+    transition: background 500ms;
+    /* opacity: 0.3; */
+    
+  }
+
+  
+
+
+
+  /* mainpage */
+  #pur {
+    background: url(https://images.alphacoders.com/786/thumb-1920-78663.jpg );
+    /* background: url(https://vistapointe.net/images/rashtrapati-bhavan-wallpaper-7.jpg); */
+    background-size: cover;
+    background-position: center; 
+    background-attachment: fixed;
+
+
+    /* width:1519px;
+    height: 1000px; */
+    min-height: 100vh;
+    font-family: "Lato";
+    color: white;
+}
+
+.bruh {
+	font-weight: 700;
+  font-size: 5em;
+  font-family: 'ZCOOL XiaoWei', serif;
+
+}
+
+
+.content{
+	padding-top: 20%;
+	text-align: center;
+    text-shadow: 0px 4px 3px rgba(0,0,0,0.4),
+                 0px 8px 13px rgba(0,0,0,0.1),
+                 0px 18px 23px rgba(0,0,0,0.1);
+}
+
+.itshr {
+    width: 400px;
+    border-top: 1px solid #f8f8f8;
+    border-bottom: 1px solid rgba(0,0,0,0.2);
+}
+
+
+/* maine content styling starts from here just writing long so teko dikh jaye */
+
+
+
+
+
+
+
+
+/* its the main content  */
+
+
+
+
+
+
+
+/* its the main content  */
+@import url(https://fonts.googleapis.com/css?family=Raleway);
+
+body {
+    background: #f9f9f9;
+    font-size: 16px;
+    font-family: 'Raleway', sans-serif
+}
+
+.container {
+    margin-top: 80px;
+  /* margin: 50px; */
+}
+
+.title {
+    color: #1a1a1a;
+    text-align: center;
+    margin-bottom: 10px
+}
+
+.content {
+    position: relative;
+    width: 90%;
+    max-width: 400px;
+    margin: auto;
+    overflow: hidden
+}
+
+.content .content-overlay {
+    background: rgba(0, 0, 0, 0.7);
+    position: absolute;
+    height: 99%;
+    width: 100%;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    opacity: 0;
+    -webkit-transition: all 0.4s ease-in-out 0s;
+    -moz-transition: all 0.4s ease-in-out 0s;
+    transition: all 0.4s ease-in-out 0s
+}
+
+.content:hover .content-overlay {
+    opacity: 1
+}
+
+.content-image {
+    width: 100%
+}
+
+img {
+    box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.1);
+    border-radius: 5px
+}
+
+.content-details {
+    position: absolute;
+    text-align: center;
+    padding-left: 1em;
+    padding-right: 1em;
+    width: 100%;
+    top: 50%;
+    left: 50%;
+    opacity: 0;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    -webkit-transition: all 0.3s ease-in-out 0s;
+    -moz-transition: all 0.3s ease-in-out 0s;
+    transition: all 0.3s ease-in-out 0s
+}
+
+.content:hover .content-details {
+    top: 50%;
+    left: 50%;
+    opacity: 1
+}
+
+.content-details h3 {
+    color: #fff;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    margin-bottom: 0.5em;
+    text-transform: uppercase
+}
+
+.content-details p {
+    color: #fff;
+    font-size: 0.8em
+}
+
+.fadeIn-bottom {
+    top: 80%
+}
+
+
+
+/* body{    margin: 0;
+    padding: 0;
+    background: #ffffff;
+    font-family: sans-serif;
+} */
+
+
+
+
+/* filter form  */
+form{
+  width: 300px;
+  height: 750px;
+  border: 3px solid rgba(0,0,0,0.1);
+  border-radius: 30px;
+  padding: 20px;
+  margin: 150px auto 0 auto;
+  box-shadow: 5px 5px 5px #c3c9c9;
+  background-color: #021526;
+
+}
+
+form label{
+  color: #F2F2F2;
+}
+form legend{
+  color: #F2F2F2;
+}
+
+form h2{
+  color: #F2F2F2;
+}
+
+/* content before wanted  */
+
+/* introduction */
+#fuckuu{
+ /* background-color: rgb(73, 79, 82); */
+ /* background:url(https://i.pinimg.com/564x/61/2a/d1/612ad1919c8e0293fa7eb2e9b7247ea5.jpg) ; */
+background: url(https://images5.alphacoders.com/725/thumb-1920-725012.jpg);
+ background-repeat: no-repeat;
+ background-size: cover;
+ background-position: bottom;
+ background-attachment: fixed;
+ opacity: 0.9;
+  
+}
+
+
+#dev{
+  color: whitesmoke;
+  font-size: 25px;
+
+}
+
+
+
+
+/* how to use */
+#fuckuuuu{
+  background-color: #E3E4E4;
+
+
+}
+
+/* help */
+#zoro{
+  background-color:#021526;
+  color: #E3E4E4;
+}
+
+
+/* aboutus */
+#fuckuuu{
+  background-color: #E3E4E4;
+}
+
+
+
+/* contactinfo */
+#fucku{
+  background-color: black;
+}
+
+.ok{
+  background-color: black;
+}
+
+
+/* background of wanted nd missing */
+#bc{
+  text-align: center;
+  color: #F2F2F2;
+}
+
+#fuckme{
+  /* background-color: lightgrey; */
+ background-color: #021526;
+ /* background-color: #872c07; */
+
+  /* border-radius: 30%; */
+  border-bottom-left-radius: 10%;
+}
+
+ /* #ex{ 
+ background-color: lightgrey;
+  background: url(https://i.pinimg.com/564x/79/8d/28/798d289b1b70b3dcd94141f5252d4683.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+   background-position: center; 
+  background-color: #021526;
+
+ }  */
+
+#try{
+  /* background-color: lightgrey; */
+ background-color: #021526;
+ /* background-color: #872c07; */
+  /* border-radius: 10%; */
+  border-top-left-radius: 10%;
+}
+
+
+
+/* form  */
+#rib{
+  /* background-color:gray; */
+   background-color: #E3E4E4;
+  
+}
+
+#sar{
+  background-color: #E3E4E4;
+
+}
+
+#fuckform{
+  background-color: rgb(78, 78, 78);
+}
+/* icons */
+.sasin{
+  color: whitesmoke;
+}
+
+/* befor introduction */
+#anush{
+  color: #E3E4E4;
+}
+.btn-danger{
+  background-color: transparent;
+  border-color: whitesmoke;
+}
+
+/* trial */
+/* .image {
+  height: 600px;
+  width: 100%;
+  float: left;
+  margin: 1.66%;
+  background-size: cover;
+  background-position: center center;
+} */
+
+.navbar-brand img{
+  height:80px ;
+  width:80px ;
+}
+
+
+
+/* ashdjsdhskfj;qoifj;eQFJE;WFHEWUFIHNEBV */
+
+
+#custom-button {
+  padding: 10px;
+  color: white;
+  background-color: #009578;
+  border: 1px solid #000;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#custom-button:hover {
+  background-color: #00b28f;
+}
+
+#custom-text {
+  margin-left: 10px;
+  font-family: sans-serif;
+  color: #aaa;
+}
+
+.carousel img {
+  height: 800px;
+}
+
+/* vjfkdhgleghrlhigjhsdljiogsjisdnjg */
+

@@ -1,0 +1,8 @@
+Django==3.1.7
+dlib==19.19.0
+pillow
+face-recognition==1.3.0
+django-extensions
+matplotlib
+opencv-python
+pandas

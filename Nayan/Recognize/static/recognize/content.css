@@ -1,0 +1,90 @@
+body{
+    margin: 0;
+    padding: 0;
+    background: #ffffff;
+    font-family: sans-serif;
+}
+.container{
+    width: 1280px;
+    
+    margin: 70px auto 0;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.container .box{
+    position: relative;
+    width: 300px;
+    height: 300px;
+    background: #ff0;
+    margin: 10px;
+    box-sizing: border-box;
+    display: inline-block;
+}
+.container .box .imgBox{
+    position: relative;
+    overflow: hidden;
+}
+.container .box .imgBox img{
+    max-width: 100%;
+    transition: transform 2s ;
+
+}
+.container .box:hover .imgBox img{
+    transform: scale(1.2);
+}
+
+.container .box .details{
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    bottom: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.8);
+    transform: scaleY(0);
+    transition: transform .5s;
+
+}
+.container .box:hover .details{
+    transform: scaleY(1);
+}
+
+.container .box .details .content{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%) ;
+    text-align: center;
+    padding: 15px;
+    color: #fff;
+}
+
+.container .box .details .content h2{
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    color: #ff0;
+}
+
+
+.container .box .details .content p{
+    margin: 10px 0 0;
+    padding: 0;
+}
+#fucku{
+    background-color: green;
+}
+form{
+    width: 300px;
+    height: 750px;
+    border: 3px solid rgba(0,0,0,0.1);
+    border-radius: 30px;
+    padding: 20px;
+    margin: 150px auto 0 auto;
+    box-shadow: 5px 5px 5px #74E3F6;
+
+}
+
+#fuckuu{
+    background-color: green;
+}
