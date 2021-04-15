@@ -33,12 +33,14 @@ def image2byte(image):
 def Train(path):    
     images=[]
     Names=[]
+    ids = []
     lst=os.listdir(path)
     
     for pl in lst:
         imgn=cv2.imread(f'{path}/{pl}')
         images.append(imgn)
-        Names.append(os.path.splitext(pl)[0].upper())
+        Names.append(os.path.splitext(pl)[0].upper().split('.')[1])
+        ids.append(os.path.splitext(pl)[0].upper().split('.')[0])
     
     
     def findenc(images):
@@ -53,19 +55,19 @@ def Train(path):
     enck= findenc(images)
     x=os.listdir()
     if 'CriminalSet.pk' not in x:
-        pickle.dump((enck, Names), open('CriminalSet.pk', 'wb'))
+        pickle.dump((enck, Names), open('Project/CriminalSet.pk', 'wb'))
         print("Encoded Criminal Set")
     else:
-        pickle.dump((enck, Names), open('MissingSet.pk', 'wb'))
+        pickle.dump((enck, Names), open('Project/MissingSet.pk', 'wb'))
         print("Encoded Missing Set")
     
     
-    print(Names)
+    print(Names,ids)
 
 x=os.listdir()
 if 'CriminalSet.pk' not in x and 'MissingSet.pk' not in x:
-    path = '/Criminal DB/Criminal DB'
+    path = 'Project/Criminal DB/Criminal DB'
     Train(path)
-    path='/MissingDB/MissingDB'
+    path='Project/MissingDB/MissingDB'
     Train(path)
 
