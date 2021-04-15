@@ -15,7 +15,7 @@ from datetime import datetime,time
 import pandas as pd
 #from google.colab import files
 import PIL
-
+from Register import BASE_DIR
 
 def byte2image(byte):
     jpeg=b64decode(byte.split(',')[1])
@@ -53,12 +53,12 @@ def Train(path):
         return encL
     
     enck= findenc(images)
-    x=os.listdir()
+    x=os.listdir(os.path.join(BASE_DIR,'Project'))
     if 'CriminalSet.pk' not in x:
-        pickle.dump((enck, Names), open('Project/CriminalSet.pk', 'wb'))
+        pickle.dump((enck, Names), open(os.path.join(BASE_DIR,'Project/CriminalSet.pk'), 'wb'))
         print("Encoded Criminal Set")
     else:
-        pickle.dump((enck, Names), open('Project/MissingSet.pk', 'wb'))
+        pickle.dump((enck, Names), open(os.path.join(BASE_DIR,'Project/MissingSet.pk'), 'wb'))
         print("Encoded Missing Set")
     
     
@@ -66,8 +66,8 @@ def Train(path):
 
 x=os.listdir()
 if 'CriminalSet.pk' not in x and 'MissingSet.pk' not in x:
-    path = 'Project/Criminal DB/Criminal DB'
+    path = os.path.join(BASE_DIR,'Project/Criminal DB/Criminal DB')
     Train(path)
-    path='Project/MissingDB/MissingDB'
+    path=os.path.join(BASE_DIR,'Project/MissingDB/MissingDB')
     Train(path)
 
