@@ -27,18 +27,12 @@ def index(request):
 
 def get_frame():
     cap =cv2.VideoCapture(0+cv2.CAP_DSHOW)
-    namea = []
     while True:
         _, frame = cap.read()
         frame=cv2.flip(frame,1)
         x = FRDist(frame,enck,Names)
         imgencode = cv2.imencode('.jpg',frame)[1]
         stringData= imgencode.tobytes()
-        
-        if x!=None and x[0]!='Unknown':
-            #print(x[0])
-            namea.append(x[0])
-
         yield(b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n'+ stringData +b'\r\n')
 
     cap.release()

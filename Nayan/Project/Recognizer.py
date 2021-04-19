@@ -11,7 +11,7 @@ from .Register import ReportFileCreate, ReportFileEdit
 
 MissingID,MissingEnck, MissingNames = pickle.load(open(os.path.join(BASE_DIR,'Project/MissingSet.pk'), 'rb'))
 CriminalID,CriminalEnck, CriminalNames = pickle.load(open(os.path.join(BASE_DIR,'Project/CriminalSet.pk'), 'rb'))
-enck,Names = MissingEnck + CriminalEnck, MissingNames + CriminalNames
+IDS,enck,Names = MissingID+CriminalID, MissingEnck + CriminalEnck, MissingNames + CriminalNames
 MissingSetNames = set(MissingNames)
 CriminalSetNames = set(CriminalNames)
 namea=[]
@@ -28,22 +28,25 @@ def FRDist(frame,enck,Names):
         if match[matchindex] and faceDis[matchindex]<=0.46:
             name=Names[matchindex].upper()
             y1,x2,y2,x1=faceloc
+            ids=''
             if name in CriminalNames:
                 cv2.rectangle(frame,(x1,y1),(x2,y2),(0,0,255),2)
                 cv2.putText(frame,name,(x1+6,y1-6),cv2.FONT_HERSHEY_COMPLEX,1,(0,0,255),2)
                 cv2.imwrite(os.path.join(BASE_DIR,'/Recognize/recognized/Criminal/'+f'{name}.jpg'),frame)
                 category = 'Criminal/Red'
-                if name not in namea:
-                    namea.append(name)
-                    ReportFileEdit(name,category)
+                ids=IDS[matchindex]
+                if ids not in namea:
+                    namea.append(ids)
+                    ReportFileEdit(name,category,ids)
             if name in MissingNames:
                 cv2.rectangle(frame,(x1,y1),(x2,y2),(0,255,255),2)
                 cv2.putText(frame,name,(x1+6,y1-6),cv2.FONT_HERSHEY_COMPLEX,1,(0,255,255),2)
                 cv2.imwrite(os.path.join(BASE_DIR,'/Recognize/recognized/Missing/'+f'{name}.jpg'),frame)
                 category = 'Missing/Yellow'
+                ids=IDS[matchindex]
                 if name not in namea:
-                    namea.append(name)
-                    ReportFileEdit(name,category)
+                    namea.append(ids)
+                    ReportFileEdit(name,category,ids)
         else:
             name='Unknown'
             y1,x2,y2,x1=faceloc
@@ -51,4 +54,3 @@ def FRDist(frame,enck,Names):
             cv2.putText(frame,name,(x1+6,y1-6),cv2.FONT_HERSHEY_COMPLEX,1,(0,255,0),2)
         
         return [name]
-
