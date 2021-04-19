@@ -9,8 +9,8 @@ from .Register import ReportFileCreate, ReportFileEdit
 
 
 
-MissingEnck, MissingNames = pickle.load(open(os.path.join(BASE_DIR,'Project/MissingSet.pk'), 'rb'))
-CriminalEnck, CriminalNames = pickle.load(open(os.path.join(BASE_DIR,'Project/CriminalSet.pk'), 'rb'))
+MissingID,MissingEnck, MissingNames = pickle.load(open(os.path.join(BASE_DIR,'Project/MissingSet.pk'), 'rb'))
+CriminalID,CriminalEnck, CriminalNames = pickle.load(open(os.path.join(BASE_DIR,'Project/CriminalSet.pk'), 'rb'))
 enck,Names = MissingEnck + CriminalEnck, MissingNames + CriminalNames
 MissingSetNames = set(MissingNames)
 CriminalSetNames = set(CriminalNames)
@@ -31,7 +31,7 @@ def FRDist(frame,enck,Names):
             if name in CriminalNames:
                 cv2.rectangle(frame,(x1,y1),(x2,y2),(0,0,255),2)
                 cv2.putText(frame,name,(x1+6,y1-6),cv2.FONT_HERSHEY_COMPLEX,1,(0,0,255),2)
-                cv2.imwrite(os.path.join(BASE_DIR,'/Recognize/recognized/Criminal/')+f'{name}.jpg',frame)
+                cv2.imwrite(os.path.join(BASE_DIR,'/Recognize/recognized/Criminal/'+f'{name}.jpg'),frame)
                 category = 'Criminal/Red'
                 if name not in namea:
                     namea.append(name)
@@ -39,7 +39,7 @@ def FRDist(frame,enck,Names):
             if name in MissingNames:
                 cv2.rectangle(frame,(x1,y1),(x2,y2),(0,255,255),2)
                 cv2.putText(frame,name,(x1+6,y1-6),cv2.FONT_HERSHEY_COMPLEX,1,(0,255,255),2)
-                cv2.imwrite(BASE_DIR+os.path.join('/Recognize/recognized/Missing/')+f'{name}.jpg',frame)
+                cv2.imwrite(os.path.join(BASE_DIR,'/Recognize/recognized/Missing/'+f'{name}.jpg'),frame)
                 category = 'Missing/Yellow'
                 if name not in namea:
                     namea.append(name)

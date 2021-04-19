@@ -55,10 +55,10 @@ def Train(path):
     enck= findenc(images)
     x=os.listdir(os.path.join(BASE_DIR,'Project'))
     if 'CriminalSet.pk' not in x:
-        pickle.dump((enck, Names), open(os.path.join(BASE_DIR,'Project/CriminalSet.pk'), 'wb'))
+        pickle.dump((ids,enck, Names), open(os.path.join(BASE_DIR,'Project/CriminalSet.pk'), 'wb'))
         print("Encoded Criminal Set")
     else:
-        pickle.dump((enck, Names), open(os.path.join(BASE_DIR,'Project/MissingSet.pk'), 'wb'))
+        pickle.dump((ids,enck, Names), open(os.path.join(BASE_DIR,'Project/MissingSet.pk'), 'wb'))
         print("Encoded Missing Set")
     
     

@@ -10,8 +10,8 @@ from Nayan.settings import BASE_DIR
 import os
 from Project.Register import ReportFileCreate, ReportFileEdit
 
-MissingEnck, MissingNames = pickle.load(open(os.path.join(BASE_DIR,'Project/MissingSet.pk'), 'rb'))
-CriminalEnck, CriminalNames = pickle.load(open(os.path.join(BASE_DIR,'Project/CriminalSet.pk'), 'rb'))
+MissingID,MissingEnck, MissingNames = pickle.load(open(os.path.join(BASE_DIR,'Project/MissingSet.pk'), 'rb'))
+CriminalID,CriminalEnck, CriminalNames = pickle.load(open(os.path.join(BASE_DIR,'Project/CriminalSet.pk'), 'rb'))
 enck,Names = MissingEnck + CriminalEnck, MissingNames + CriminalNames
 MissingSetNames = set(MissingNames)
 CriminalSetNames = set(CriminalNames)
