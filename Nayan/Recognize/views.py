@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.http import HttpResponse,StreamingHttpResponse, HttpResponseServerError
 from django.views.decorators import gzip
 import cv2
@@ -6,6 +6,7 @@ import time
 from Project.Recognizer import FRDist
 import pickle
 import numpy as np
+from PIL import Image
 from Nayan.settings import BASE_DIR
 import os
 from Project.Register import ReportFileCreate, ReportFileEdit
@@ -16,7 +17,23 @@ enck,Names = MissingEnck + CriminalEnck, MissingNames + CriminalNames
 MissingSetNames = set(MissingNames)
 CriminalSetNames = set(CriminalNames)
 
-
+def indexupload(request):
+    if(request.method == 'POST'):
+        if request.FILES.get('inputImage',None)!=None:
+            inputImage=request.FILES['inputImage']
+            img = Image.open(inputImage)
+            col = cv2.cvtColor(np.array(img),cv2.COLOR_BGR2RGB)
+            x = FRDist(col,enck,Names)
+            try:
+                if x!=None or x[0]!='Unknown':
+                    return redirect('/app/upload/?success=True')
+                else:
+                    return redirect('/app/upload/?error=MFDorNF')
+            
+            except:
+                return redirect('/app/upload/?error=NIS')
+    else:
+        return render(request,'recognize/upload.html')
 def indexscreen(request): 
     template = "recognize/screens.html"
     return render(request,template)

@@ -25,7 +25,7 @@ def FRDist(frame,enck,Names):
         matchindex=np.argmin(faceDis)
         name = 'Unknown'
         category = 'Green'
-        if match[matchindex] and faceDis[matchindex]<=0.46:
+        if match[matchindex] and faceDis[matchindex]<=0.49:
             name=Names[matchindex].upper()
             y1,x2,y2,x1=faceloc
             ids=''
@@ -44,7 +44,7 @@ def FRDist(frame,enck,Names):
                 cv2.imwrite(os.path.join(BASE_DIR,'/Recognize/recognized/Missing/'+f'{name}.jpg'),frame)
                 category = 'Missing/Yellow'
                 ids=IDS[matchindex]
-                if name not in namea:
+                if ids not in namea:
                     namea.append(ids)
                     ReportFileEdit(name,category,ids)
         else:

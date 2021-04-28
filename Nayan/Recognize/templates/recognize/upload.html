@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Welcome</title>
+</head>
+
+<body>
+
+    <div class="container-fluid pt-3">
+        {% if "success" in request.get_full_path %}
+            <div class="alert alert-success alert-dismissible">
+            <a href="{% url 'recognize:upload' %}" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>Success!</strong> Image Submited
+        </div>
+        {% elif "MFDorNF"  in request.get_full_path %}
+        <div class="alert alert-danger alert-dismissible">
+            <a href="{% url 'recognize:upload' %}" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>Error!</strong>  Face not in dataset.
+        </div>
+        {% elif "NIS"  in request.get_full_path %}
+        <div class="alert alert-danger alert-dismissible">
+            <a href="{% url 'recognize:upload' %}" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>Error!</strong> No Image Selected.
+        </div>
+        {% endif %}
+        <div class="row p-3">
+            <div class="m-auto form-holder bg-dark p-1">
+                <form action="{% url 'recognize:upload' %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="file" name="inputImage" id="inputImage">
+                    <div id="imageHolder"></div>
+                    <h5 class="text-center text-white mt-2">Click On Image To Select</h5>
+                    <h6 class="text-center text-white" id="fileName"></h6>
+                    <button type="submit" class="btn btn-success mt-2">Upload Image</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script>
+        $('#imageHolder').click(function () {
+            $('#inputImage').trigger('click');
+        });
+
+        $('#inputImage').change(function (e) {
+            $('#fileName').html(e.target.files[0].name);
+        });
+    </script>
+</body>
+
+</html>
