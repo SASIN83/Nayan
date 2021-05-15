@@ -1,10 +1,10 @@
 from django import forms
-from Recognize.models import Image, CATEGORY_CHOICES
+from Recognize.models import ImageUploader, CATEGORY_CHOICES
 
 
 class ImageForm(forms.ModelForm):
     class Meta:
-        model = Image
+        model = ImageUploader
         fields = [
             "photo",
             "category",
@@ -14,7 +14,7 @@ class ImageForm(forms.ModelForm):
 
 class FilterForm(forms.ModelForm):
     class Meta:
-        model = Image
+        model = ImageUploader
         fields = [
             "filter",
         ]

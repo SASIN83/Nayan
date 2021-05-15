@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from django.core.paginator import Paginator
-from Recognize.models import Image
+from Recognize.models import ImageUploader
 from Recognize.forms import ImageForm, FilterForm
 from django.http import HttpResponse,StreamingHttpResponse, HttpResponseServerError
 from django.views.decorators import gzip
@@ -9,7 +9,7 @@ import time
 from Project.Recognizer import FRDist
 import pickle
 import numpy as np
-#from PIL import Image
+from PIL import Image
 from Nayan.settings import BASE_DIR
 import os
 from Project.Register import ReportFileCreate, ReportFileEdit
@@ -74,22 +74,22 @@ def gallary(request):
     if request.method == 'POST':
         imgform = ImageForm(request.POST, request.FILES)
         filterform = FilterForm(request.POST)
-        img = Image.objects.all()
+        img = ImageUploader.objects.all()
         if imgform.is_valid():
             imgform.save()
             imgform = ImageForm()
             return render(request, 'recognize/gallary.html', {'imgform': imgform, 'filterform': filterform, 'img': img})
         if filterform.is_valid():
             if str(request.POST['filter']) == 'all':
-                img = Image.objects.all()
+                img = ImageUploader.objects.all()
             else:
-                img = Image.objects.filter(category=str(request.POST['filter']))
+                img = ImageUploader.objects.filter(category=str(request.POST['filter']))
             filterform = FilterForm()
             imgform = ImageForm()
             return render(request, 'recognize/gallary.html', {'imgform': imgform,'filterform': filterform, 'img': img})
     try:
         if request.method == 'GET':
-            img = Image.objects.all()
+            img = ImageUploader.objects.all()
         return render(request, 'recognize/gallary.html', {'imgform': imgform,'filterform': filterform, 'img': img})
     except:
         return render(request, 'recognize/gallary.html', {'imgform': imgform,'filterform': filterform})

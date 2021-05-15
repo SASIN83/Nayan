@@ -28,6 +28,7 @@
     
 </head>
 <body>
+    {% csrf_token %}
     {% block body %}
     {% endblock %}
     <nav id="mainNavbar" class="navbar navbar-dark navbar-expand-md py-0 fixed-top">

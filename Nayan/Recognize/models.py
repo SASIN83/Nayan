@@ -29,13 +29,15 @@ class Category(models.Model):
 CATEGORY_CHOICES = (
     ('miss','MISSINGS'),
     ('crime', 'CRIMINALS'),
+    ('mart','MARTYR'),
 )
 FILTER_CHOICES = (
     ('miss','MISSINGS'),
     ('crime', 'CRIMINALS'),
+    ('mart','MARTYR'),
 )
 
-class Image(models.Model):
+class ImageUploader(models.Model):
     
     title = models.CharField(max_length=200, unique=True, default='Untitled')
     photo = models.ImageField(upload_to="images")
