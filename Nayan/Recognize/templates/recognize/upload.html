@@ -1,15 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/style.css">
-    <title>Welcome</title>
-</head>
-
-<body>
-
+{% extends 'recognize/base.html' %}
+{% block title %}Upload{% endblock  %}
+{% load static %}
+{% block strapings %}
+<link rel="stylesheet" href="{% static 'recognize/bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static 'recognize/style.css'%}">
+{% endblock  %}
+{% block body %}
     <div class="container-fluid pt-3">
         {% if "success" in request.get_full_path %}
             <div class="alert alert-success alert-dismissible">
@@ -41,8 +37,8 @@
         </div>
     </div>
 
-    <script src="js/jquery.js"></script>
-    <script src="js/bootstrap.js"></script>
+    <script src="{% static 'recognize/jquery.js'%}"></script>
+    <script src="{% static 'recognize/bootstrap.js'%}"></script>
     <script>
         $('#imageHolder').click(function () {
             $('#inputImage').trigger('click');
@@ -52,6 +48,4 @@
             $('#fileName').html(e.target.files[0].name);
         });
     </script>
-</body>
-
-</html>
+{% endblock  %}

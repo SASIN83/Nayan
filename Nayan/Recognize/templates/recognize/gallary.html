@@ -1,0 +1,40 @@
+{% extends 'recognize/gallarybase.html' %}
+{% load static %}
+
+{% block banner %}
+<div class="container text-primary">
+
+    <h1>Upload Image</h1>
+
+{% endblock %}
+
+{% block content %}
+    <div class="row text-primary" align="right">
+      <form action="" method="post">
+      {% csrf_token %}
+      <div class="col-sm">
+
+       </div>
+      <div class="col-sm">
+            Filter: {{filterform.filter}}
+       </div>
+       <div class="col-sm">
+           <input type="submit" class="btn btn-primary" value="Filter">
+       </div>
+
+      </form>
+    </div>
+    <hr>
+    <div class="row">
+        {% for x in img %}
+        <div class="col-sm-3">
+            <div class="card m-1">
+                <img src="{{x.photo.url}}" alt="" class="card-img-top" height="200px" />
+                <div class="card-footer">
+                    <small> {{x.title}}</small>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}

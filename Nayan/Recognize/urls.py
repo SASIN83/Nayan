@@ -5,5 +5,6 @@ urlpatterns = [
     url(r'^stream/recognize/$',views.dynamic_stream,name="videostream"),
     url(r'^stream/$',views.indexscreen, name='video'),
     url(r'^upload/$',views.indexupload, name='upload'),
-    url(r'^$',views.index),
+    url(r'^gallary/$',views.gallary, name='gallary'),
+    url(r'^$',views.index, name='home'),
 ]

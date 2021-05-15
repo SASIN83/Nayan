@@ -1,0 +1,190 @@
+/* body */
+*{
+    margin:0;
+    padding:0;
+    font-family: sans-serif;
+}
+
+.wrapper{
+    display:flex;
+    width: 100%;
+    height: 100vh;
+    flex-wrap: wrap;
+}
+
+.left-col, .right-col{
+    flex-basis: 50%;
+    height: 100vh;
+    position: relative;
+}
+
+.logo{
+    display: block;
+    width: 100px;
+    margin-top:30px;
+    margin-left:120px ;
+    margin-bottom: 10px;
+}
+
+/* left content */
+
+.land {
+    max-width: 500px;
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    background-color: #91b3fa;
+    padding-top: 50px ;
+    padding-bottom:50px ;
+    padding-left: 100px ;
+    padding-right: 100px;
+}
+.land h1{
+    color: white;
+    font-size: 60px;
+    line-height: 70px;
+    margin: 25px 0;
+}
+
+/* button*/
+
+.land p{
+  color: #777;
+  font-size:25px;
+  line-height: 28px;
+  margin-bottom: 50px;
+}
+
+button{
+    width: 200px;
+    border: #4042e2 solid 5px;
+    background: white;
+    /* box-shadow: 0 10px 10px 1px;
+    rgba(219,219,219,0.5); */
+    padding: 17px 0;
+    color: #91b3fa;
+    outline: none;
+    font-size: 20px;
+    cursor: pointer;
+    font-weight: 600;
+    border-radius: 10px;
+}
+
+button:hover{
+    background: #4042e2;
+}
+
+/* slider  */
+
+.slider{
+    width: 100%;
+    height: 60%;
+    display: flex;
+}
+
+.slider img{
+    width: 100%;
+}
+
+.slider-content{
+    width: 100%;
+    height: 40%;
+    background: #91b3fa;
+    padding-top: 30px ;
+    padding-left: 30px;
+}
+
+/* right content  */
+
+
+.slider-content h2{
+    font-size: 26px;
+    font-weight: 100;
+    color: #fff;
+}
+
+.slider-content p{
+    color: #bfffdd;
+    font-size: 16px;
+    line-height: 24px;
+    margin-bottom: 20px;
+}
+
+hr{
+    border:none;
+    width: 270px;
+    height: 1px;
+    background: #b5e3cf;
+    margin:20px 0 30px;
+}
+
+/* contoller */
+
+.controller{
+    width: 120px;
+    padding: 15px;
+    display:flex;
+    align-items:center;
+    justify-content: space-between;
+}
+
+.controller .arrow{
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    border:2px solid #fff;
+    color: #fff;
+}
+
+.controller .arrow:hover{
+    background: #fff;
+    color: #91b3fa;
+}
+
+.vertical-line{
+    width: 2px;
+    height: 30px;
+    background: #b5e3cf;
+}
+
+/* media query */
+@media only screen and (max-width:795px){
+    .logo{
+        margin: 30px auto;
+    }
+    .left-col , .right-col{
+        flex-basis: 100%;
+    }
+
+    .land{
+        left: 0;
+        padding: 20px;
+        text-align: center;
+    }
+    .land h1{
+        font-size: 34px;
+        line-height: 38px;
+    }
+    
+    .slider{
+        height: 50%;
+    }
+
+    .slider-content{
+        height: 53%;
+    }
+
+}
+
+@media only screen and (max-width:320px){
+    .slider{
+        height: auto;
+    }
+    .slider-content{
+        height: auto;
+    }
+}
