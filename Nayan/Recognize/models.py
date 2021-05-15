@@ -43,7 +43,7 @@ class ImageUploader(models.Model):
     photo = models.ImageField(upload_to="images")
     date = models.DateTimeField(auto_now_add=True)
     category = models.CharField(max_length=7, choices=CATEGORY_CHOICES, default='home')
-    filter = models.CharField(max_length=7, choices=FILTER_CHOICES, default='all')
+    filter = models.CharField(max_length=7, choices=FILTER_CHOICES)
 
     '''
     def __str__(self):
