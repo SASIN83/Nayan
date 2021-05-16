@@ -27,14 +27,15 @@ def indexupload(request):
             img = Image.open(inputImage)
             col = cv2.cvtColor(np.array(img),cv2.COLOR_BGR2RGB)
             x = FRDist(col,enck,Names)
-            try:
-                if x!=None or x[0]!='Unknown':
-                    return redirect('/app/upload/?success=True')
-                else:
-                    return redirect('/app/upload/?error=MFDorNF')
             
-            except:
+            if x!=None or x[0]!='Unknown':
+                return redirect('/app/upload/?success=True')
+            else:
+                return redirect('/app/upload/?error=MFDorNF')
+            
+        else:
                 return redirect('/app/upload/?error=NIS')
+        
     else:
         return render(request,'recognize/upload.html')
 def indexscreen(request): 
