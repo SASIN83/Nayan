@@ -1,22 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Screens</title>
-</head>
-<body>
-    <table>
-        <tr>
-            
-            <td>
-                    <h1>Video Streaming</h1>
-                    <img src="{% url 'recognize:videostream' %}">
+{% extends 'recognize/base.html' %}
+{% block title %}Stream{% endblock  %}
+{% block body %}
+    <section class="container-fluid ">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <div  class="text text-center mt-5">
+                    <h1 class="bro">Video Streaming</h1>
+                    <img  class="ho" src="{% url 'recognize:videostream' %}">
+                </div>
 
-            </td>
-        </tr>
-    </table>
-        
-</body>
-</html>
+                 <a href = "{% url 'recognize:home' %}"><button type="button" class=" btn btn-outline-primary d-flex justify-content-center" >Stop Stream</button></a>
+
+            </div>
+
+            <div class="col-lg-6 px-0">
+                <img class="ho img-fluid " src="https://image.freepik.com/free-vector/e-sport-game-streaming-abstract-concept-illustration_335657-2197.jpg" alt="">
+            </div>
+
+        </div>
+
+    </section> 
+
+{% endblock %}

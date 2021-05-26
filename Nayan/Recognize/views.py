@@ -1,4 +1,7 @@
 from django.shortcuts import render,redirect
+from django.core.paginator import Paginator
+from Recognize.models import ImageUploader
+from Recognize.forms import ImageForm, FilterForm
 from django.http import HttpResponse,StreamingHttpResponse, HttpResponseServerError
 from django.views.decorators import gzip
 import cv2
@@ -24,14 +27,15 @@ def indexupload(request):
             img = Image.open(inputImage)
             col = cv2.cvtColor(np.array(img),cv2.COLOR_BGR2RGB)
             x = FRDist(col,enck,Names)
-            try:
-                if x!=None or x[0]!='Unknown':
-                    return redirect('/app/upload/?success=True')
-                else:
-                    return redirect('/app/upload/?error=MFDorNF')
             
-            except:
+            if x!=None or x[0]!='Unknown':
+                return redirect('/app/upload/?success=True')
+            else:
+                return redirect('/app/upload/?error=MFDorNF')
+            
+        else:
                 return redirect('/app/upload/?error=NIS')
+        
     else:
         return render(request,'recognize/upload.html')
 def indexscreen(request): 
@@ -39,7 +43,7 @@ def indexscreen(request):
     return render(request,template)
     
 def index(request): 
-    template = "recognize/home.html"
+    template = "recognize/index.html"
     return render(request,template)
 
 def get_frame():
@@ -64,3 +68,33 @@ def dynamic_stream(request,stream_path="video"):
         return "error"
 
 
+def gallary(request):
+    imgform = ImageForm()
+    filterform = FilterForm()
+    img=[]
+    if request.method == 'POST':
+        imgform = ImageForm(request.POST, request.FILES)
+        filterform = FilterForm(request.POST)
+        img = ImageUploader.objects.all()
+        if imgform.is_valid():
+            imgform.save()
+            imgform = ImageForm()
+            return render(request, 'recognize/gallary.html', {'imgform': imgform, 'filterform': filterform, 'img': img})
+        if filterform.is_valid():
+            if str(request.POST['filter']) == 'all':
+                img = ImageUploader.objects.all()
+            else:
+                img = ImageUploader.objects.filter(category=str(request.POST['filter']))
+            filterform = FilterForm()
+            imgform = ImageForm()
+            return render(request, 'recognize/gallary.html', {'imgform': imgform,'filterform': filterform, 'img': img})
+    try:
+        if request.method == 'GET':
+            img = ImageUploader.objects.all()
+        return render(request, 'recognize/gallary.html', {'imgform': imgform,'filterform': filterform, 'img': img})
+    except:
+        return render(request, 'recognize/gallary.html', {'imgform': imgform,'filterform': filterform})
+
+
+def success(request):
+    return HttpResponse('successfully uploaded')

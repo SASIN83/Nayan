@@ -1,0 +1,41 @@
+{% extends 'recognize/gallarybase.html' %}
+{% load static %}
+{%block strapings%}
+<link rel="stylesheet"  type = "text/css" href="{% static 'recognize/gallary.css' %}">
+{%endblock%}
+{% block banner %}
+<div class="container text-primary ">
+    <h1> </h1>
+    <h1> </h1>
+    <h1 class="didi">Gallary</h1>
+    <div class="row text-primary " align="center">
+      <form action="" method="post">
+      {% csrf_token %}
+      <div class="col-sm">
+
+       </div>
+      <div class="col-sm mt-2">
+            Filter: {{filterform.filter}}
+       </div>
+       <div class="col-sm mt-2">
+           <input type="submit" class="btn btn-primary" value="Filter">
+       </div>
+
+      </form>
+    </div>
+    <hr>
+  <div class="row">
+
+        {% for x in img %}
+        <div class="col-sm-3">
+            <div class="card m-1">
+                <img src="{{x.photo.url}}" alt="" class="card-img-top" height="300px" />
+                <div class="card-footer">
+                    <small> {{x.title}}</small>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+{% endblock %}

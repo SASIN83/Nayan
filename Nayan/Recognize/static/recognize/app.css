@@ -1,0 +1,105 @@
+body {
+    background: white;
+    font-family: "Nunito", sans-serif;
+}
+
+.blurb h2 {
+   color: #EA1C2C;
+   font-weight: 100;
+   font-size: 2.5rem;
+}
+
+.blurb p {
+    color: #f498b8;
+    font-weight: 100;
+    font-size: 1.125rem;
+    line-height: 2;
+}
+
+.content {
+    margin-top: 100px;
+    margin-bottom: 100px;
+}
+
+#mainNavbar {
+    font-size: 1.5rem;
+    font-weight: 100;    
+}
+
+#mainNavbar .nav-link {
+    color: #1995F6;
+}
+
+#mainNavbar .nav-link:hover {
+    color: #EA1C2C;
+}
+
+#mainNavbar .navbar-brand {
+    color: #EA1C2C;
+    font-size: 1.5rem;
+}
+
+#headingGroup span {
+    color: #EA1C2C;
+}
+
+#headingGroup h1 {
+    font-weight: 100;
+    font-size: 4rem;
+}
+
+.navbar.scrolled {
+    background: #91b3fa;
+    transition: background 500ms;
+}
+
+@media (max-width: 1200px) {
+    #headingGroup h1 {
+        font-weight: 100;
+        font-size: 3rem;
+    }
+    .blurb h2 {
+        font-size: 2rem;
+    }
+}
+
+
+
+
+/* scroll */
+.scroll[data-scroll="in"]{
+    transform: scale(1);
+    transition: .5s;
+    opacity: 1;
+}
+
+.scroll[data-scroll="out"]{
+    transform: scale(0.5);
+    transition: .5s;
+    opacity: 0;
+}
+
+.scroll2[data-scroll="in"]{
+    transform: scale(1);
+    transition: 2s;
+    opacity: 1;
+}
+
+.scroll2[data-scroll="out"]{
+    transform: scale(0.5);
+    transition: 2s;
+    opacity: 0;
+}
+
+.scroll3[data-scroll="in"]{
+    transform: scale(1);
+    transition: 3s;
+    opacity: 1;
+}
+
+.scroll3[data-scroll="out"]{
+    transform: scale(0.5);
+    transition: 3s;
+    opacity: 0;
+}
+
