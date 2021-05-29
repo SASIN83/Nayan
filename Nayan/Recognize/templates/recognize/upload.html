@@ -6,7 +6,11 @@
 <link rel="stylesheet" href="{% static 'recognize/style.css'%}">
 {% endblock  %}
 {% block body %}
+<<<<<<< HEAD
     <div class="container-fluid pt-3">
+=======
+    <div class="container-fluid pt-5">
+>>>>>>> 1cffb409ceaeed1f61c8d9128112c2aeb1e1895c
         {% if "success" in request.get_full_path %}
             <div class="alert alert-success alert-dismissible">
             <a href="{% url 'recognize:upload' %}" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -23,7 +27,7 @@
             <strong>Error!</strong> No Image Selected.
         </div>
         {% endif %}
-        <div class="row p-3">
+        <div class="row p-5 mt-5">
             <div class="m-auto form-holder bg-dark p-1">
                 <form action="{% url 'recognize:upload' %}" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
@@ -31,7 +35,7 @@
                     <div id="imageHolder"></div>
                     <h5 class="text-center text-white mt-2">Click On Image To Select</h5>
                     <h6 class="text-center text-white" id="fileName"></h6>
-                    <button type="submit" class="btn btn-success mt-2">Upload Image</button>
+                    <button type="submit" class="btn btn-success mt-2 ml-5 mb-4">Upload Image</button>
                 </form>
             </div>
         </div>
