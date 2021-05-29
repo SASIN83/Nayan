@@ -19,9 +19,17 @@
     <!-- Custom CSS -->
     {% block strapings %}
     {% endblock  %}
+<<<<<<< HEAD
     <link rel="stylesheet" type = "text/css" href="{% static 'recognize/app.css' %}">
     <link rel="stylesheet" href="{% static 'recognize/Rfloat.css' %}">
     <link rel="stylesheet" href="{% static 'recognize/land.css' %}">
+=======
+    <link rel="stylesheet" type = "text/css" href="{% static 'recognize/app2.css' %}">
+    <link rel="stylesheet" href="{% static 'recognize/Rfloat.css' %}">
+    <link rel="stylesheet" href="{% static 'recognize/land.css' %}">
+    <link rel="stylesheet" type = "text/css" href="{% static 'recognize/base.css' %}">
+    <link rel="stylesheet" type = "text/css" href="{% static 'recognize/wave.css' %}">
+>>>>>>> 1cffb409ceaeed1f61c8d9128112c2aeb1e1895c
     
     
     <title>{% block title %}NAYAN{% endblock %}</title>
@@ -64,6 +72,10 @@
                         <li><img src="{% static 'images/float3.png' %}"/><a href="{% url 'recognize:gallary' %}" id="">Gallary</a></li>
                         <li><img src="{% static 'images/float4.png' %}"/><a href="#" id="">Help</a></li>
                         <li><img src="{% static 'images/float5.png' %}"/><a href="#" id="">Settings</a></li>
+<<<<<<< HEAD
+=======
+                        <li><img src="{% static 'images/forms4.png' %}"/><a href="https://forms.gle/Q8ojjQUYE3nNRcU39" id="">F.I.R</a></li>
+>>>>>>> 1cffb409ceaeed1f61c8d9128112c2aeb1e1895c
                         <!-- <li><i class="fa fa-user"></i><a href="#" id="">Close</a></li> -->
                     </ul>
             </div>    
@@ -108,6 +120,26 @@
             targets:".scroll3",
             offset:1600
              });
+<<<<<<< HEAD
+=======
+
+
+               let wave1 = document.getElementById('wave1');
+        let wave2 = document.getElementById('wave2');
+        let wave3 = document.getElementById('wave3');
+        let wave4 = document.getElementById('wave4');
+
+        window.addEventListener('scroll', function(){
+            let value = window.scrollY;
+
+            wave1.style.backgroundPositionX = 400 + value * 4 + 'px';
+            wave2.style.backgroundPositionX = 300 + value * -4 + 'px';
+            wave3.style.backgroundPositionX = 200 + value *  2 + 'px';
+            wave4.style.backgroundPositionX = 100 + value *  -2 + 'px';
+            
+
+        })
+>>>>>>> 1cffb409ceaeed1f61c8d9128112c2aeb1e1895c
     </script>
 
 </body>

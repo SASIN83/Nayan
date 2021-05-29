@@ -1,0 +1,14 @@
+.didi{
+    color: rgb(118, 135, 231);
+     padding-top: 50px;
+    
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  
