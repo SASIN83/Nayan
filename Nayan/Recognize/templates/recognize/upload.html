@@ -1,3 +1,4 @@
+  
 {% extends 'recognize/base.html' %}
 {% block title %}Upload{% endblock  %}
 {% load static %}
@@ -6,11 +7,7 @@
 <link rel="stylesheet" href="{% static 'recognize/style.css'%}">
 {% endblock  %}
 {% block body %}
-<<<<<<< HEAD
-    <div class="container-fluid pt-3">
-=======
     <div class="container-fluid pt-5">
->>>>>>> 1cffb409ceaeed1f61c8d9128112c2aeb1e1895c
         {% if "success" in request.get_full_path %}
             <div class="alert alert-success alert-dismissible">
             <a href="{% url 'recognize:upload' %}" class="close" data-dismiss="alert" aria-label="close">&times;</a>

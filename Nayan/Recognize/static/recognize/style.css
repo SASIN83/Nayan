@@ -15,11 +15,7 @@
 #imageHolder {
     width: 300px;
     height: 300px;
-<<<<<<< HEAD
-    background: url("../images/photo.png");
-=======
     background: url("../images/tap.jpg");
->>>>>>> 1cffb409ceaeed1f61c8d9128112c2aeb1e1895c
     background-size: cover;
     cursor: pointer;
 }

@@ -1,14 +1,5 @@
 {% extends 'recognize/gallarybase.html' %}
 {% load static %}
-<<<<<<< HEAD
-
-{% block banner %}
-<div class="container text-primary">
-    <h1> </h1>
-    <h1> </h1>
-    <h1>Gallary</h1>
-    <div class="row text-primary" align="right">
-=======
 {%block strapings%}
 <link rel="stylesheet"  type = "text/css" href="{% static 'recognize/gallary.css' %}">
 {%endblock%}
@@ -18,52 +9,33 @@
     <h1> </h1>
     <h1 class="didi">Gallary</h1>
     <div class="row text-primary " align="center">
->>>>>>> 1cffb409ceaeed1f61c8d9128112c2aeb1e1895c
       <form action="" method="post">
       {% csrf_token %}
       <div class="col-sm">
 
        </div>
-<<<<<<< HEAD
-      <div class="col-sm">
-            Filter: {{filterform.filter}}
-       </div>
-       <div class="col-sm">
-=======
       <div class="col-sm mt-2">
             Filter: {{filterform.filter}}
        </div>
        <div class="col-sm mt-2">
->>>>>>> 1cffb409ceaeed1f61c8d9128112c2aeb1e1895c
            <input type="submit" class="btn btn-primary" value="Filter">
        </div>
 
       </form>
     </div>
     <hr>
-<<<<<<< HEAD
-    <div class="row">
-        {% for x in img %}
-        <div class="col-sm-3">
-            <div class="card m-1">
-                <img src="{{x.photo.url}}" alt="" class="card-img-top" height="200px" />
-=======
   <div class="row">
 
         {% for x in img %}
         <div class="col-sm-3">
             <div class="card m-1">
                 <img src="{{x.photo.url}}" alt="" class="card-img-top" height="300px" />
->>>>>>> 1cffb409ceaeed1f61c8d9128112c2aeb1e1895c
                 <div class="card-footer">
                     <small> {{x.title}}</small>
                 </div>
             </div>
         </div>
         {% endfor %}
-<<<<<<< HEAD
-=======
 
->>>>>>> 1cffb409ceaeed1f61c8d9128112c2aeb1e1895c
     </div>
 {% endblock %}
