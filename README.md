@@ -9,3 +9,5 @@
   * Training is done in Project/Train.py. 
   * Recognition is done by Project/Recognize.py. 
   * Chatbot feature is still not yet developed so any independent contribution is welcomed.
+
+Note: if you cant install dlib for whatever reason, then just clone https://github.com/SASIN83/dlibpreinstalled and use pip install on file given in the repo. also use of python 3.7.9 is recommended as dlib is most stable for this version of python.
