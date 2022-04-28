@@ -10,4 +10,6 @@
   * Recognition is done by Project/Recognize.py. 
   * Chatbot feature is still not yet developed so any independent contribution is welcomed.
 
+<iframe width="1005" height="565" src="https://www.youtube.com/embed/czHbuRs_dys" title="Nayan Demo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 Note: if you cant install dlib for whatever reason, then just clone https://github.com/SASIN83/dlibpreinstalled and use pip install on file given in the repo. also use of python 3.7.9 is recommended as dlib is most stable for this version of python.
