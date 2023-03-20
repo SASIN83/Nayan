@@ -15,5 +15,9 @@
 [![IMAGE ALT TEXT HERE](https://i.ytimg.com/vi/czHbuRs_dys/hqdefault.jpg)](https://youtu.be/czHbuRs_dys)
 
 Note: 
-  * If you can't install dlib for whatever reason, then just clone https://github.com/SASIN83/dlibpreinstalled and use pip install on file given in the repo. 
+  * If you can't install dlib for whatever reason, then just clone/download https://github.com/SASIN83/dlibpreinstalled and run
+```
+pip install dlib-19.19.0-cp37-cp37m-win_amd64.whl
+```
+
   * Also use of python 3.7.9 is recommended as dlib is most stable for this version of python.
