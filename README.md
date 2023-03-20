@@ -1,5 +1,5 @@
 # NAYAN: VIRTUAL POLICE STATION
-##### DJANGO BASED SYSTEM WITH FACE RECOGNITION USING FACE_RECOGNITION_API
+##### DJANGO BASED FACE RECOGNITION SYSTEM USING FACE_RECOGNITION_API
 
   * This face recognition based virtual police station. 
   * Currently this supports only single face based input, with google docs as a form of FIR and a boring image gallery with only image and name of persons.
