@@ -1,0 +1,82 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Image Capture</title>
+    <!-- jscdn -->
+    <script src="https://unpkg.com/scroll-out/dist/scroll-out.min.js"></script>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,300,400,700" rel="stylesheet">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+    <link rel="stylesheet" type = "text/css" href="{% static 'recognize/app2.css' %}">
+    <link rel="stylesheet" href="{% static 'recognize/Rfloat.css' %}">
+    <link rel="stylesheet" href="{% static 'recognize/land.css' %}">
+    <!--<link rel="stylesheet" type = "text/css" href="{% static 'recognize/base.css' %}">-->
+    <link rel="stylesheet" type = "text/css" href="{% static 'recognize/wave.css' %}">
+    
+    <link type="text/css" rel="stylesheet" href="{% static 'recognize/materialize.min.css' %}">
+    <title>Image Capture</title>
+
+</head>
+<body>
+    <nav id="mainNavbar" class="navbar navbar-dark navbar-expand-md py-0 fixed-top">
+        <a href="{% url 'recognize:home' %}" class="navbar-brand"><img src="{% static 'images/logo.png' %}" alt="" width="80px" height="50px"></a>
+        <button class="navbar-toggler" data-toggle="collapse" data-target="#navLinks" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navLinks">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a href="{% url 'recognize:home' %}" class="nav-link">HOME</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">ABOUT</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#Services" class="nav-link">SERVICE</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    
+    
+        {% block content %}
+        {% endblock %}
+
+</div>
+<div class="hoe" id="win">
+    <div class="action">
+            <div class="profile" onclick="menuToggle();">
+                 <img src="{% static 'images/20943401.jpg' %}" alt="" >
+            </div>
+
+        <div class="menu">
+              <h3>NAYAN<br><span>The third eye</span></h3>
+                <ul class="px-0">
+                    <li><img src="{% static 'images/float1.png' %}"/><a href="{% url 'recognize:video' %}" id="">   Videostream</a></li>
+                    <li><img src="{% static 'images/float2.png' %}"/><a href="{% url 'recognize:upload' %}" id="">Image upload</a></li>
+                    <li><img src="{% static 'images/float3.png' %}"/><a href="{% url 'recognize:gallary' %}" id="">Gallary</a></li>
+                    <li><img src="{% static 'images/float3.png' %}"/><a href="{% url 'recognize:image' %}" id="">Image Capture</a></li>
+                    <li><img src="{% static 'images/forms4.png' %}"/><a href="https://forms.gle/Q8ojjQUYE3nNRcU39" id="">F.I.R</a></li>
+                    <!-- <li><i class="fa fa-user"></i><a href="#" id="">Close</a></li> -->
+                </ul>
+        </div>    
+    </div>
+</div>
+    
+</body>
+<script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/materialize.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/formsubmit.js' %}"></script>
+{% block js %}
+{% endblock %}
+</html>

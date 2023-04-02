@@ -35,14 +35,15 @@ def Train(path):
     Names=[]
     ids = []
     lst=os.listdir(path)
-    
-    for pl in lst:
-        imgn=cv2.imread(f'{path}/{pl}')
-        images.append(imgn)
-        Names.append(os.path.splitext(pl)[0].upper().split('.')[1])
-        ids.append(os.path.splitext(pl)[0].upper().split('.')[0])
-    
-    
+    try:
+        for pl in lst:
+            imgn=cv2.imread(f'{path}/{pl}')
+            images.append(imgn)
+            Names.append(os.path.splitext(pl)[0].upper().split('.')[1])
+            ids.append(os.path.splitext(pl)[0].upper().split('.')[0])
+        
+    except IndexError:
+        pass
     def findenc(images):
         encL=[]
         for img in images:
@@ -65,7 +66,7 @@ def Train(path):
     print(Names,ids)
 
 x=os.listdir()
-if 'CriminalSet.pk' not in x and 'MissingSet.pk' not in x:
+if 'CriminalSet.pk' not in x or 'MissingSet.pk' not in x:
     path = os.path.join(BASE_DIR,'Project/Criminal DB/Criminal DB')
     Train(path)
     path=os.path.join(BASE_DIR,'Project/MissingDB/MissingDB')

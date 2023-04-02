@@ -6,5 +6,6 @@ urlpatterns = [
     url(r'^stream/$',views.indexscreen, name='video'),
     url(r'^upload/$',views.indexupload, name='upload'),
     url(r'^gallary/$',views.gallary, name='gallary'),
+    url(r'^image/$',views.ImageFaceDetect.as_view(), name='image'),
     url(r'^$',views.index, name='home'),
 ]

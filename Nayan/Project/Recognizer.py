@@ -53,4 +53,4 @@ def FRDist(frame,enck,Names):
             cv2.rectangle(frame,(x1,y1),(x2,y2),(0,255,0),2)
             cv2.putText(frame,name,(x1+6,y1-6),cv2.FONT_HERSHEY_COMPLEX,1,(0,255,0),2)
         
-        return [name]
+        return [name,category]

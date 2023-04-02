@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect
 from django.core.paginator import Paginator
 from Recognize.models import ImageUploader
 from Recognize.forms import ImageForm, FilterForm
-from django.http import HttpResponse,StreamingHttpResponse, HttpResponseServerError
+from django.http import HttpResponse,StreamingHttpResponse, HttpResponseServerError, JsonResponse
 from django.views.decorators import gzip
 import cv2
 import time
@@ -13,7 +13,9 @@ from PIL import Image
 from Nayan.settings import BASE_DIR
 import os
 from Project.Register import ReportFileCreate, ReportFileEdit
-
+from django.views.generic import TemplateView
+import io
+import base64
 MissingID,MissingEnck, MissingNames = pickle.load(open(os.path.join(BASE_DIR,'Project/MissingSet.pk'), 'rb'))
 CriminalID,CriminalEnck, CriminalNames = pickle.load(open(os.path.join(BASE_DIR,'Project/CriminalSet.pk'), 'rb'))
 enck,Names = MissingEnck + CriminalEnck, MissingNames + CriminalNames
@@ -38,6 +40,49 @@ def indexupload(request):
         
     else:
         return render(request,'recognize/upload.html')
+
+
+def base64_decode(data):
+    # with open('sample.png', 'wb') as f:
+    #     f.write(base64.decodestring(data.split(',')[1].encode()))
+    out=base64.decodestring(data.split(',')[1].encode())
+    return out
+     
+
+def base64_encode(data):
+    if data:
+        return 'data:image/png;base64,' + data
+
+class ImageFaceDetect(TemplateView):
+    template_name = 'recognize/image.html'
+
+    def post(self, request, *args, **kwargs):
+        data = request.POST.get('image')
+        try:
+            base = base64_decode(data)
+            nparr = np.fromstring(base, np.uint8)
+            imgd = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+            data = cv2.cvtColor(np.array(nparr),cv2.COLOR_BGR2RGB)
+            image_data = FRDist(imgd,enck,Names)
+            #image=cv2.imencode('.jpg',img)[1]
+            buffer = io.BytesIO()
+            img = Image.fromarray(data)
+            img.save(image_data[0], format="png")
+            encoded_string = base64.b64encode(buffer.getvalue()).decode('ascii')
+            if image_data:
+                if image_data!='Unknown':
+                    if image_data[1] == "Missing/Yellow":
+                        with open("Missing/"+image_data[0]+'.png','wb') as f:
+                            f.write(base)
+                    if image_data[1] == "Missing/Yellow":
+                        with open("Criminal/"+image_data[0]+'.png','wb') as f:
+                            f.write(base)
+                return JsonResponse(status=200, data={'image': encoded_string, 'message': str(image_data[0])+', '+str(image_data[1])})
+        except Exception as e:
+            print(e)
+        return JsonResponse(status=400, data={'errors': {'error_message': 'No face detected'}})
+
+
 def indexscreen(request): 
     template = "recognize/screens.html"
     return render(request,template)
