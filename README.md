@@ -6,7 +6,7 @@
   * Training new image and adding it to database is still done manually. 
   * Everything related to backend is in Project repository and everything related to Django is in Recognizer directory. 
   * This uses IP geolocation of device to register any recognized faces and writes it to a csv file with its date in the filename automatically using pandas in Project/register.py. 
-  * Training is done in Project/Train.py. (Note: Training will only work when the name of image is in this format "ID.Name.jpeg", sometimes the image name is "ID Name.jpeg" which does not work as Train.py splits id,name,extension using "." as a seperator to save it in encoding as label.  
+  * Training is done in Project/Train.py. (Note: Training will only work when the name of image is in this format "ID.Name.jpeg", sometimes the image name is "ID Name.jpeg" which does not work as Train.py splits id,name,extension using "." as a seperator to save it in encoding as label.)
   * Recognition is done by Project/Recognize.py. 
   * Chatbot feature is still not yet developed so any independent contribution is welcomed.
 
