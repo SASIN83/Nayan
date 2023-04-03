@@ -62,17 +62,62 @@
         <div class="menu">
               <h3>NAYAN<br><span>The third eye</span></h3>
                 <ul class="px-0">
+                    <li><img src="{% static 'images/float0.png' %}"/><a href="{% url 'recognize:home' %}" id="">   Home</a></li>
                     <li><img src="{% static 'images/float1.png' %}"/><a href="{% url 'recognize:video' %}" id="">   Videostream</a></li>
                     <li><img src="{% static 'images/float2.png' %}"/><a href="{% url 'recognize:upload' %}" id="">Image upload</a></li>
                     <li><img src="{% static 'images/float3.png' %}"/><a href="{% url 'recognize:gallary' %}" id="">Gallary</a></li>
-                    <li><img src="{% static 'images/float3.png' %}"/><a href="{% url 'recognize:image' %}" id="">Image Capture</a></li>
+                    <li><img src="{% static 'images/float6b.png' %}"/><a href="{% url 'recognize:image' %}" id="">Image Capture</a></li>
                     <li><img src="{% static 'images/forms4.png' %}"/><a href="https://forms.gle/Q8ojjQUYE3nNRcU39" id="">F.I.R</a></li>
                     <!-- <li><i class="fa fa-user"></i><a href="#" id="">Close</a></li> -->
                 </ul>
         </div>    
     </div>
 </div>
-    
+<script>
+    $(function () {
+        $(document).scroll(function () {
+            var $nav = $("#mainNavbar");
+            $nav.toggleClass("scrolled", $(this).scrollTop() > $nav.height());
+        });
+    });
+
+
+       function menuToggle(){
+        const togglleMenu = document.querySelector('.menu');
+        togglleMenu.classList.toggle('active');
+    }
+   ScrollOut({
+        targets:".scroll",
+        offset:400
+         });
+
+         ScrollOut({
+        targets:".scroll2",
+        offset:800
+         });
+
+         ScrollOut({
+        targets:".scroll3",
+        offset:1600
+         });
+
+
+           let wave1 = document.getElementById('wave1');
+    let wave2 = document.getElementById('wave2');
+    let wave3 = document.getElementById('wave3');
+    let wave4 = document.getElementById('wave4');
+
+    window.addEventListener('scroll', function(){
+        let value = window.scrollY;
+
+        wave1.style.backgroundPositionX = 400 + value * 4 + 'px';
+        wave2.style.backgroundPositionX = 300 + value * -4 + 'px';
+        wave3.style.backgroundPositionX = 200 + value *  2 + 'px';
+        wave4.style.backgroundPositionX = 100 + value *  -2 + 'px';
+        
+
+    })
+</script>
 </body>
 <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/materialize.min.js' %}"></script>

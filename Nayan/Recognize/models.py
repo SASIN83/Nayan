@@ -19,10 +19,10 @@ class ImageUploader(models.Model):
     title = models.CharField(max_length=200, unique=True, default='Untitled')
     photo = models.ImageField(upload_to="images")
     date = models.DateTimeField(auto_now_add=True)
-    category = models.CharField(max_length=7, choices=CATEGORY_CHOICES, default='home')
-    filter = models.CharField(max_length=7, choices=FILTER_CHOICES, default='all')
+    category = models.CharField(max_length=7, choices=CATEGORY_CHOICES, default='miss')
+    filter = models.CharField(max_length=7, choices=FILTER_CHOICES, default='miss')
     def save(self, *args, **kwargs):
-        self.title = self.photo.name
+        self.title = self.photo.name.split(".")[1]
         self.date = datetime.datetime.now()
 
         return super().save(*args, **kwargs)

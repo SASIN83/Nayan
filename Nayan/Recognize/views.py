@@ -15,6 +15,7 @@ import os
 from Project.Register import ReportFileCreate, ReportFileEdit
 from django.views.generic import TemplateView
 import io
+from django.views.decorators.csrf import csrf_exempt
 import base64
 MissingID,MissingEnck, MissingNames = pickle.load(open(os.path.join(BASE_DIR,'Project/MissingSet.pk'), 'rb'))
 CriminalID,CriminalEnck, CriminalNames = pickle.load(open(os.path.join(BASE_DIR,'Project/CriminalSet.pk'), 'rb'))
@@ -112,7 +113,7 @@ def dynamic_stream(request,stream_path="video"):
     except :
         return "error"
 
-
+@csrf_exempt
 def gallary(request):
     imgform = ImageForm()
     filterform = FilterForm()
@@ -135,7 +136,7 @@ def gallary(request):
             return render(request, 'recognize/gallary.html', {'imgform': imgform,'filterform': filterform, 'img': img})
     try:
         if request.method == 'GET':
-            img = ImageUploader.objects.all()
+            img = ImageUploader.objects.filter(category='miss')
         return render(request, 'recognize/gallary.html', {'imgform': imgform,'filterform': filterform, 'img': img})
     except:
         return render(request, 'recognize/gallary.html', {'imgform': imgform,'filterform': filterform})
