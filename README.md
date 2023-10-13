@@ -15,10 +15,27 @@
 
 [![IMAGE ALT TEXT HERE](https://i.ytimg.com/vi/czHbuRs_dys/hqdefault.jpg)](https://youtu.be/czHbuRs_dys)
 
+##Setup
+```
+pip install -r requirements.txt
+```
+```
+cd Nayan
+```
+```
+python manage.py makemigrations
+```
+```
+python manage.py migrate
+```
+```
+python manage.py runserver
+```
+
 Note: 
-  * If you can't install dlib for whatever reason, then just clone/download https://github.com/SASIN83/dlibpreinstalled and run
+  * If you can't install and build dlib for whatever reason, then just clone/download https://github.com/SASIN83/dlibpreinstalled and run
 ```
 pip install dlib-19.19.0-cp37-cp37m-win_amd64.whl
 ```
 
-  * Also use of python 3.7.9 is recommended as dlib is most stable for this version of python.
+  * Also use of python 3.7.9 is recommended as dlib is most stable for this version of python and I have used it in this project.
