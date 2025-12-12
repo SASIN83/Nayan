@@ -15,14 +15,14 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.conf.urls import url,include
+from django.urls import path, include
 #from Recognize import views
 from django.conf.urls.static import static
 # url patterns for browsing 
 from django.conf import settings
 urlpatterns = [
-    url(r'^admin/', admin.site.urls), 
-    url(r'^app/',include('Recognize.urls')),
+    path('admin/', admin.site.urls), 
+    path('app/', include('Recognize.urls')),
    ]
 if settings.DEBUG:
     #urlpatterns+=static(settings.STATIC_URL,document_root = settings.STATIC_ROOT)
