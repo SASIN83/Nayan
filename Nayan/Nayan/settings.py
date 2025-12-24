@@ -13,7 +13,7 @@ SECRET_KEY = 'wk6zdb)@mc9=-+y9^xwpq6g=b8*_ub2xld4ne4@=af4a7(h7$v'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'django.contrib.sites',
     'Recognize',
+    'sslserver',
     #'django.contrib.redirects',
 ]
 

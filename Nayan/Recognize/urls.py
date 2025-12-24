@@ -1,11 +1,12 @@
 from Recognize import views
-from django.conf.urls import url,include
+from django.urls import path, include
 app_name = 'recognize'
 urlpatterns = [
-    url(r'^stream/recognize/$',views.dynamic_stream,name="videostream"),
-    url(r'^stream/$',views.indexscreen, name='video'),
-    url(r'^upload/$',views.indexupload, name='upload'),
-    url(r'^gallary/$',views.gallary, name='gallary'),
-    url(r'^image/$',views.ImageFaceDetect.as_view(), name='image'),
-    url(r'^$',views.index, name='home'),
+    path('stream/recognize/', views.dynamic_stream, name="videostream"),
+    path('stream/', views.indexscreen, name='video'),
+    path('upload/', views.indexupload, name='upload'),
+    path('gallary/', views.gallary, name='gallary'),
+    path('image/', views.ImageFaceDetect.as_view(), name='image'),
+    path('process_image/', views.process_image, name='process_image'),
+    path('', views.index, name='home'),
 ]

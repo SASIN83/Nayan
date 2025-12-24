@@ -20,7 +20,7 @@ def ReportFileCreate():
     'Month':[],
     'Year':[]}
     df = pd.DataFrame(train)
-    if os.path.exists(os.path.join(BASE_DIR,'/Recognize/Records/Records-{}.csv'.format(dstr))):
+    if os.path.exists(path):
         pass
     else:
         df.to_csv(path,header=True,index=False,encoding='utf-8')
@@ -47,7 +47,6 @@ def ReportFileEdit(name,category,ids):
     df = pd.DataFrame(pf)
     df.to_csv(path,index=False,header = False,mode = 'a')
     pd.read_csv(path).drop_duplicates(subset=['ID','Location'],keep='last').to_csv(path,header=True,index=False)
-
 #data = {'Name':name,'Type':category,'Location':location,'Time':tstr.strftime("%X"),'Date':dstr,'Month':dstr.strftime("%B"),'Year':dstr.strftime("%Y")}
 
 
