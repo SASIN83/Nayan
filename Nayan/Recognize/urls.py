@@ -7,5 +7,6 @@ urlpatterns = [
     path('upload/', views.indexupload, name='upload'),
     path('gallary/', views.gallary, name='gallary'),
     path('image/', views.ImageFaceDetect.as_view(), name='image'),
+    path('process_image/', views.process_image, name='process_image'),
     path('', views.index, name='home'),
 ]
