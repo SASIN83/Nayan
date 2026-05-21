@@ -1,0 +1,10 @@
+- [x] Update HTML structure in image.html to match screens.html layout (section, row, video-container, etc.)
+- [x] Change title to "Photo Capture Face Detection"
+- [x] Add buttons for Switch Camera and Capture Photo
+- [x] Modify JavaScript: Add camera switching logic, remove streaming, add photo capture functionality
+- [x] Ensure form submission triggers on photo capture
+- [x] Test camera functionality - Server running at http://127.0.0.1:8000/
+- [x] Change response format to popup-style display like screens.html
+- [x] Fix jQuery dependency issues by using native fetch API
+- [x] Add CSRF token handling for AJAX requests
+- [x] Fix floating menu positioning - changed from left: 95% to right: 20px to prevent overflow (fixed CSS reversion issue)

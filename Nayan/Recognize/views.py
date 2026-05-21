@@ -28,16 +28,45 @@ def indexupload(request):
         if request.FILES.get('inputImage',None)!=None:
             inputImage=request.FILES['inputImage']
             img = Image.open(inputImage)
+<<<<<<< Updated upstream
             col = cv2.cvtColor(np.array(img),cv2.COLOR_BGR2RGB)
             x = FRDist(col,enck,Names)
             
             if x!=None or x[0]!='Unknown':
                 return redirect('/app/upload/?success=True')
+=======
+            #col = cv2.cvtColor(np.array(img),cv2.COLOR_BGR2RGB)
+            col = np.array(img)
+            image_data_result = FRDist(col,enck,Names)
+
+            if image_data_result and image_data_result[0] != 'Unknown':
+                name = image_data_result[0]
+                category = image_data_result[1]
+                coords = image_data_result[2]
+
+                    # 5. Saving Logic (SAFE VERSION)
+                    # If you want to save the image with boxes drawn by FRDist:
+                    
+                    # Convert back to BGR so colors look right when saved
+                    # output_img = cv2.cvtColor(img_rgb, cv2.COLOR_RGB2BGR)
+                    
+                    # Define a safe path (Ensure 'media/detections' exists)
+                    # filename = f"detection_{name}_{np.random.randint(1000)}.jpg"
+                    # save_path = os.path.join(settings.MEDIA_ROOT, 'detections', filename)
+                    # cv2.imwrite(save_path, output_img)
+
+                return JsonResponse({
+                        'message': 'Success',
+                        'name': name,
+                        'category': category,
+                        'coords': coords
+                    })    
+>>>>>>> Stashed changes
             else:
-                return redirect('/app/upload/?error=MFDorNF')
+                return JsonResponse({'errors': {'error_message': 'No face detected or not in database'}})
             
         else:
-                return redirect('/app/upload/?error=NIS')
+            return JsonResponse({'errors': {'error_message': 'No Image Selected'}})
         
     else:
         return render(request,'recognize/upload.html')
@@ -63,25 +92,27 @@ class ImageFaceDetect(TemplateView):
             base = base64_decode(data)
             nparr = np.fromstring(base, np.uint8)
             imgd = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-            data = cv2.cvtColor(np.array(nparr),cv2.COLOR_BGR2RGB)
             image_data = FRDist(imgd,enck,Names)
-            #image=cv2.imencode('.jpg',img)[1]
-            buffer = io.BytesIO()
-            img = Image.fromarray(data)
-            img.save(image_data[0], format="png")
-            encoded_string = base64.b64encode(buffer.getvalue()).decode('ascii')
-            if image_data:
-                if image_data!='Unknown':
-                    if image_data[1] == "Missing/Yellow":
-                        with open("Missing/"+image_data[0]+'.png','wb') as f:
-                            f.write(base)
-                    if image_data[1] == "Missing/Yellow":
-                        with open("Criminal/"+image_data[0]+'.png','wb') as f:
-                            f.write(base)
-                return JsonResponse(status=200, data={'image': encoded_string, 'message': str(image_data[0])+', '+str(image_data[1])})
+            if image_data and image_data[0] != 'Unknown':
+                name = image_data[0]
+                category = image_data[1]
+                # Save logic
+                if category == "Missing/Yellow":
+                    with open("Missing/"+name+'.png','wb') as f:
+                        f.write(base)
+                elif category == "Criminal/Red":
+                    with open("Criminal/"+name+'.png','wb') as f:
+                        f.write(base)
+                return JsonResponse({
+                    'message': 'Success',
+                    'name': name,
+                    'category': category
+                })
+            else:
+                return JsonResponse({'errors': {'error_message': 'No face detected or not in database'}})
         except Exception as e:
             print(e)
-        return JsonResponse(status=400, data={'errors': {'error_message': 'No face detected'}})
+            return JsonResponse({'errors': {'error_message': 'Error processing image'}})
 
 
 def indexscreen(request): 
@@ -142,5 +173,121 @@ def gallary(request):
         return render(request, 'recognize/gallary.html', {'imgform': imgform,'filterform': filterform})
 
 
+<<<<<<< Updated upstream
+=======
+@csrf_exempt
+def process_image(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            image_data = data.get('image')
+
+            if image_data:
+                # 1. Robust Base64 Decoding (Prevents IndexError)
+                if ',' in image_data:
+                    image_data = image_data.split(',')[1]
+                
+                try:
+                    
+                    base = base64.b64decode(image_data)
+                    nparr = np.frombuffer(base, np.uint8)
+                    img_bgr = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+                    if img_bgr is None or img_bgr.size == 0:
+                        pass
+                    gray = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2GRAY)
+                    # Calculate average brightness (0 = Black, 255 = White)
+                    avg_brightness = np.mean(gray)
+
+                    if avg_brightness < 10:  # Threshold for "Too Dark/Black"
+                        return JsonResponse({'errors': {'error_message': 'Image too dark / Camera covered'}})
+                except Exception:
+                    return JsonResponse({'errors': {'error_message': 'Invalid Image Data'}})
+
+                # 2. CRITICAL FIX: Resize to prevent RAM Crash
+                # Keeps image small enough for fast processing, big enough for recognition
+                height, width = img_bgr.shape[:2]
+                if width == 0 or height == 0:
+                    return JsonResponse({'errors': {'error_message': 'Invalid image dimensions'}})
+                # More aggressive resizing to reduce memory usage
+                max_width = 480  # Reduced from 800 to 480 for lower memory
+                if width > max_width:
+                    scaling_factor = max_width / float(width)
+                    img_bgr = cv2.resize(img_bgr, None, fx=scaling_factor, fy=scaling_factor, interpolation=cv2.INTER_AREA)
+
+                # 3. Convert to RGB for Recognition
+                img_rgb = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2RGB)
+
+                # 4. Process Recognition
+                # This blocks the server until finished. Since you resized the image,
+                # this should now take 0.2s - 0.5s instead of 5s+.
+                image_data_result = FRDistVideo(img_rgb, enck, Names)
+
+                if image_data_result and image_data_result[0] != 'Unknown':
+                    name = image_data_result[0]
+                    category = image_data_result[1]
+                    coords = image_data_result[2]
+
+                    # 5. Saving Logic (SAFE VERSION)
+                    # If you want to save the image with boxes drawn by FRDist:
+                    
+                    # Convert back to BGR so colors look right when saved
+                    # output_img = cv2.cvtColor(img_rgb, cv2.COLOR_RGB2BGR)
+                    
+                    # Define a safe path (Ensure 'media/detections' exists)
+                    # filename = f"detection_{name}_{np.random.randint(1000)}.jpg"
+                    # save_path = os.path.join(settings.MEDIA_ROOT, 'detections', filename)
+                    # cv2.imwrite(save_path, output_img)
+
+                    return JsonResponse({
+                        'message': 'Success',
+                        'name': name,
+                        'category': category,
+                        'coords': coords
+                    })
+                else:
+                    return JsonResponse({'errors': {'error_message': 'No face detected or not in database'}})
+            
+        except Exception as e:
+            # Print the actual error to your console so you can debug
+            print(f"Error processing image: {str(e)}")
+            return JsonResponse({'errors': {'error_message': 'Error processing image'}})
+
+    return JsonResponse({'errors': {'error_message': 'Invalid request'}})
+# def process_image(request):
+#     if request.method == 'POST':
+#         import json
+#         data = json.loads(request.body)
+#         image_data = data.get('image')
+
+#         if image_data:
+#             try:
+#                 # Decode base64 image
+#                 base = base64_decode(image_data)
+#                 nparr = np.frombuffer(base, np.uint8)
+#                 imgd = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+
+#                 # Process the image for face recognition
+#                 image_data_result = FRDist(imgd, enck, Names)
+
+#                 if image_data_result and image_data_result[0] != 'Unknown':
+#                     # Save recognized image if needed
+#                     if image_data_result[1] == "Missing/Yellow":
+#                         os.makedirs(os.path.join(BASE_DIR, 'Recognize/recognized/Missing'), exist_ok=True)
+#                         cv2.imwrite(os.path.join(BASE_DIR, 'Recognize/recognized/Missing', f'{image_data_result[0]}.png'), imgd)
+#                     elif image_data_result[1] == "Criminal/Red":
+#                         os.makedirs(os.path.join(BASE_DIR, 'Recognize/recognized/Criminal'), exist_ok=True)
+#                         cv2.imwrite(os.path.join(BASE_DIR, 'Recognize/recognized/Criminal', f'{image_data_result[0]}.png'), imgd)
+
+#                     return JsonResponse({'message': f'Recognized: {image_data_result[0]}, {image_data_result[1]}'})
+#                 else:
+#                     return JsonResponse({'errors': {'error_message': 'No face detected or not in database'}})
+#             except Exception as e:
+#                 print(f"Error processing image: {e}")
+#                 return JsonResponse({'errors': {'error_message': 'Error processing image'}})
+
+#     return JsonResponse({'errors': {'error_message': 'Invalid request'}})
+
+
+>>>>>>> Stashed changes
 def success(request):
     return HttpResponse('successfully uploaded')

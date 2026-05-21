@@ -1,52 +1,320 @@
-  
 {% extends 'recognize/base.html' %}
-{% block title %}Upload{% endblock  %}
+{% block title %}Upload Image{% endblock %}
 {% load static %}
+
 {% block strapings %}
-<link rel="stylesheet" href="{% static 'recognize/bootstrap.min.css' %}">
-<link rel="stylesheet" href="{% static 'recognize/style.css'%}">
-{% endblock  %}
+<style>
+    /* --- PAGE STYLING --- */
+    .upload-page {
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        min-height: 100vh;
+        padding-top: 80px;
+        padding-bottom: 50px;
+    }
+
+    /* --- CARDS --- */
+    .upload-card, .result-card {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        padding: 40px;
+        max-width: 600px;
+        margin: 0 auto;
+        text-align: center;
+        transition: all 0.3s ease;
+    }
+
+    /* FIX 1: Remove 'display: none' from here. 
+       We will hide the PARENT section in HTML instead. */
+    .result-card {
+        display: block; /* Changed from none to block */
+        border-top: 5px solid #31379d;
+    }
+    .name-section, 
+.category-section {
+    display: block;  /* Forces a line break */
+    width: 100%;     /* Ensures it takes full width */
+    text-align: center; /* Optional: keeps text centered */
+    border: none;    /* Remove that vertical divider line if it exists */
+}
+
+    /* --- DROP ZONE --- */
+    .drop-zone {
+        border: 2px dashed #31379d;
+        border-radius: 15px;
+        background: #f8f9fa;
+        min-height: 250px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        cursor: pointer;
+        transition: 0.3s;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .drop-zone:hover {
+        background: #eef2ff;
+        border-color: #EA1C2C;
+    }
+
+    /* --- IMAGES --- */
+    #imagePreview, #resultImage {
+        width: 100%;
+        max-height: 300px;
+        object-fit: contain;
+        border-radius: 10px;
+        display: none;
+    }
+    
+    #resultImage {
+        display: block; /* Result image should be visible by default */
+        margin-bottom: 20px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    /* --- BADGES --- */
+    .category-badge {
+    padding: 8px 15px;      /* Slightly reduced side padding */
+    border-radius: 50px;
+    font-weight: bold;
+    color: white;
+    background: #31379d;
+    display: inline-block;
+    
+    /* FIX FOR OVERFLOW */
+    white-space: normal;    /* Allow text to wrap to the next line */
+    word-break: break-word; /* Break long words if necessary */
+    max-width: 100%;        /* Ensure it never exceeds the column width */
+    line-height: 1.2;       /* Better spacing for multi-line text */
+}
+    .bg-criminal { background-color: #EA1C2C !important; }
+    .bg-missing { background-color: #f1c40f !important; color: black !important; }
+    .bg-safe { background-color: #2ecc71 !important; }
+
+    /* --- DATA LABELS --- */
+    .data-label { font-size: 0.9rem; color: #888; text-transform: uppercase; margin-top: 15px; }
+    .data-value { font-size: 1.5rem; font-weight: 700; color: #31379d; }
+
+    /* --- BUTTONS --- */
+    .btn-nayan {
+        background: #31379d;
+        color: white;
+        border-radius: 50px;
+        padding: 12px 40px;
+        border: none;
+        font-weight: 600;
+        margin-top: 20px;
+    }
+    .btn-nayan:hover { background: #EA1C2C; color: white; }
+
+    /* --- LOADER --- */
+    .loader {
+        display: none;
+        margin: 20px auto;
+        border: 5px solid #f3f3f3;
+        border-top: 5px solid #31379d;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+    }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+</style>
+{% endblock %}
+
 {% block body %}
-    <div class="container-fluid pt-5">
-        {% if "success" in request.get_full_path %}
-            <div class="alert alert-success alert-dismissible">
-            <a href="{% url 'recognize:upload' %}" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-            <strong>Success!</strong> Image Submited
+<div class="upload-page">
+    <div class="container">
+        
+        <div class="row justify-content-center">
+            <div class="col-md-8" id="alertBox"></div>
         </div>
-        {% elif "MFDorNF"  in request.get_full_path %}
-        <div class="alert alert-danger alert-dismissible">
-            <a href="{% url 'recognize:upload' %}" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-            <strong>Error!</strong>  Face not in dataset.
-        </div>
-        {% elif "NIS"  in request.get_full_path %}
-        <div class="alert alert-danger alert-dismissible">
-            <a href="{% url 'recognize:upload' %}" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-            <strong>Error!</strong> No Image Selected.
-        </div>
-        {% endif %}
-        <div class="row p-5 mt-5">
-            <div class="m-auto form-holder bg-dark p-1">
-                <form action="{% url 'recognize:upload' %}" method="post" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <input type="file" name="inputImage" id="inputImage">
-                    <div id="imageHolder"></div>
-                    <h5 class="text-center text-white mt-2">Click On Image To Select</h5>
-                    <h6 class="text-center text-white" id="fileName"></h6>
-                    <button type="submit" class="btn btn-success mt-2 ml-5 mb-4">Upload Image</button>
-                </form>
+
+        <div class="row" id="uploadSection">
+            <div class="col-12">
+                <div class="upload-card">
+                    <h3>Identify Person</h3>
+                    <p>Upload an image to search the database</p>
+                    
+                    <form id="uploadForm">
+                        {% csrf_token %}
+                        <input type="file" name="inputImage" id="inputImage" accept="image/*" style="display: none;">
+                        
+                        <div class="drop-zone" id="imageHolder">
+                            <div id="placeholderContent">
+                                <i class="fa fa-cloud-upload" style="font-size: 3rem; color: #31379d;"></i>
+                                <p class="mt-3">Click here to browse</p>
+                            </div>
+                            <img id="imagePreview" src="" alt="Preview">
+                        </div>
+
+                        <h6 class="mt-3 text-muted" id="fileName">No file selected</h6>
+                        
+                        <button type="submit" class="btn btn-nayan" id="submitBtn">Analyze Image</button>
+                        <div class="loader" id="loadingSpinner"></div>
+                    </form>
+                </div>
             </div>
         </div>
+
+        <div class="row" id="resultSection" style="display: none;">
+            <div class="col-12">
+                <div class="result-card">
+                    <h3 class="text-success mb-4">
+                        <i class="fa fa-check-circle"></i> Match Found
+                    </h3>
+                    
+                    <img id="resultImage" src="" alt="Identified Person">
+
+                    <div class="d-flex flex-column align-items-center mt-4">
+    
+                        <div class="name-section mb-4"> <div class="data-label">Name</div>
+                            <div class="data-value" id="display_name">--</div>
+                        </div>
+
+                        <div class="category-section">
+                            <div class="data-label">Category</div>
+                            <div class="data-value">
+                                <span class="category-badge" id="display_category">--</span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <button class="btn btn-outline-secondary mt-5" onclick="resetPage()">
+                        <i class="fa fa-arrow-left"></i> Analyze Another
+                    </button>
+                </div>
+            </div>
+        </div>
+
     </div>
+</div>
 
-    <script src="{% static 'recognize/jquery.js'%}"></script>
-    <script src="{% static 'recognize/bootstrap.js'%}"></script>
-    <script>
-        $('#imageHolder').click(function () {
-            $('#inputImage').trigger('click');
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+
+        // --- DOM ELEMENTS ---
+        const inputImage = document.getElementById('inputImage');
+        const imageHolder = document.getElementById('imageHolder');
+        const imagePreview = document.getElementById('imagePreview');
+        const fileName = document.getElementById('fileName');
+        const resultImage = document.getElementById('resultImage');
+        
+        // --- 1. IMAGE PREVIEW ---
+        imageHolder.addEventListener('click', () => inputImage.click());
+
+        inputImage.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                fileName.innerText = file.name;
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    imagePreview.src = evt.target.result;
+                    imagePreview.style.display = 'block';
+                    document.getElementById('placeholderContent').style.display = 'none';
+                    resultImage.src = evt.target.result; 
+                };
+                reader.readAsDataURL(file);
+            }
         });
 
-        $('#inputImage').change(function (e) {
-            $('#fileName').html(e.target.files[0].name);
+        // --- 2. UPLOAD LOGIC ---
+        const uploadForm = document.getElementById('uploadForm');
+        
+        uploadForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            if (!inputImage.files.length) {
+                alert("Please select an image first.");
+                return;
+            }
+
+            // Show Loader
+            const submitBtn = document.getElementById('submitBtn');
+            const loader = document.getElementById('loadingSpinner');
+            submitBtn.style.display = 'none';
+            loader.style.display = 'block';
+
+            // Prepare Data
+            const formData = new FormData(uploadForm);
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+            fetch("{% url 'recognize:upload' %}", {
+                method: 'POST',
+                body: formData,
+                headers: { 'X-CSRFToken': csrfToken }
+            })
+            .then(response => response.json())
+            .then(data => {
+                loader.style.display = 'none';
+                submitBtn.style.display = 'block';
+
+                if (data.message === 'Success') {
+                    showResultScreen(data);
+                } else {
+                    showError(data.errors ? data.errors.error_message : "Unknown Error");
+                }
+            })
+            .catch(error => {
+                loader.style.display = 'none';
+                submitBtn.style.display = 'block';
+                console.error("Fetch Error:", error);
+                showError("Network Error. Please try again.");
+            });
         });
-    </script>
-{% endblock  %}
+    });
+
+    function showResultScreen(data) {
+        // 1. Get Elements
+        const nameEl = document.getElementById('display_name');
+        const catEl = document.getElementById('display_category');
+        const uploadSec = document.getElementById('uploadSection');
+        const resultSec = document.getElementById('resultSection');
+
+        // 2. Set Text Content
+        if (nameEl) nameEl.innerText = data.name || "Unknown";
+        
+        if (catEl) {
+            const catText = data.category || "Unknown";
+            catEl.innerText = catText;
+            
+            // Color Logic
+            catEl.className = 'category-badge'; 
+            if (catText.toLowerCase().includes('criminal')) {
+                catEl.classList.add('bg-criminal');
+            } else if (catText.toLowerCase().includes('missing') || catText.toLowerCase().includes('yellow')) {
+                catEl.classList.add('bg-missing');
+            } else {
+                catEl.classList.add('bg-safe');
+            }
+        }
+
+        // 3. Swap Screens
+        if (uploadSec && resultSec) {
+            uploadSec.style.display = 'none';
+            resultSec.style.display = 'block'; // This now reveals the row, and the card inside is already visible!
+        }
+    }
+
+    function resetPage() {
+        document.getElementById('resultSection').style.display = 'none';
+        document.getElementById('uploadSection').style.display = 'block';
+        document.getElementById('uploadForm').reset();
+        document.getElementById('imagePreview').style.display = 'none';
+        document.getElementById('placeholderContent').style.display = 'block';
+        document.getElementById('fileName').innerText = "No file selected";
+        document.getElementById('alertBox').innerHTML = "";
+    }
+
+    function showError(msg) {
+        const box = document.getElementById('alertBox');
+        box.innerHTML = `<div class="alert alert-danger alert-dismissible fade show">
+                            <strong>Error:</strong> ${msg}
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                         </div>`;
+    }
+</script>
+{% endblock %}

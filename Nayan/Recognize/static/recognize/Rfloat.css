@@ -1,44 +1,32 @@
-/* float body */
-.hoe{
+.hoe {
     margin: 0;
     padding: 0;
     font-family: sans-serif;
-    background: whitesmoke;
-
+    position: relative;
+    z-index: 1000;
 }
 
-/* body{
-    background: #131419;
-} */
-
-.action{
+/* --- 1. ACTION BUTTON (Positioned Bottom Right) --- */
+.action {
     position: fixed;
-    /* top: 100px;
-    right: 800px; */
-    left: 95%;
-    top: 30%;
+    right: 30px;   /* Distance from right wall */
+    bottom: 50px;  /* Distance from floor */
+    top: auto;     /* Reset the old top value */
+    z-index: 9999;
 }
 
-@media(max-width: 990px) {
-    #win div{
-    left: 50%;
-    top: 50%;
-    }
-}
-
-.action .profile{
+.action .profile {
     position: relative;
     width: 60px;
-    height:60px;
+    height: 60px;
     border-radius: 50%;
     overflow: hidden;
     cursor: pointer;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5),
-    -3px -3px 7px rgba(255, 255, 255, 0.05)
+                -3px -3px 7px rgba(255, 255, 255, 0.05);
 }
 
-/* float image */
-.action .profile img{
+.action .profile img {
     position: absolute;
     top: 0;
     left: 0;
@@ -47,45 +35,53 @@
     object-fit: cover;
 }
 
-/* menu */
-
-.action .menu{
+/* --- 2. THE MENU (Opens Upwards) --- */
+.action .menu {
     position: absolute;
-    top: 120px;
-    right: -10px;
-    padding: 10px 20px;
-    background: white;
-    width: 200px;
-    box-sizing: 0 5px 25px rgba(0,0,0,0.2);
-    border-radius: 15px;
-    transition: 0.5s;
-    visibility: hidden;
+    right: 0;               /* Align right edge with the button */
+    
+    /* Animation Start State */
+    bottom: 20px;           /* Starts 'behind' the button */
     opacity: 0;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5),
-    -3px -3px 7px rgba(255, 255, 255, 0.05);
+    visibility: hidden;
+    
+    background: white;
+    width: 250px;
+    padding: 10px 20px;
+    box-sizing: border-box; 
+    box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+    border-radius: 15px;
+    transition: 0.4s ease-in-out;
+    
+    /* Scroll safety */
+    max-height: 60vh;
+    overflow-y: auto;
 }
 
-.action .menu.active{
-    top: 80px;
+/* --- 3. ACTIVE STATE (Floats Up) --- */
+.action .menu.active {
+    bottom: 85px;  /* Pushes the menu UP above the button */
     visibility: visible;
     opacity: 1;
 }
 
-
-.action .menu::before{
+/* --- 4. THE POINTER ARROW (Moved to Bottom) --- */
+.action .menu::before {
     content: '';
     position: absolute;
-    top: -5px;
-    right: 28px;
+    
+    /* Old 'top' removed, now we attach to bottom */
+    bottom: -8px;   
+    right: 20px;    /* Align with the button center */
+    
     width: 20px;
     height: 20px;
     background: white;
-    transform: rotate(45deg);
+    transform: rotate(45deg); /* Diamond shape */
 }
 
-/* list  */
-
-.action .menu h3{
+/* List Styling (Kept mostly same) */
+.action .menu h3 {
     width: 100%;
     text-align: center;
     font-size: 18px;
@@ -95,7 +91,7 @@
     line-height: 1.2em;
 }
 
-.action .menu h3 span{
+.action .menu h3 span {
     font-size: 14px;
     color: #cecece;
     font-weight: 400;
@@ -104,38 +100,50 @@
 .action .menu ul li {
     list-style: none;
     padding: 10px 0;
-    border-top: 1px solid rgba(245, 245, 245,1);
+    border-top: 1px solid rgba(245, 245, 245, 1);
     display: flex;
     align-items: center;
 }
 
-/* link hover  */
-.action .menu ul li i{
-    font-size: 1.5em;
+.action .menu ul li img {
+    max-width: 20px;
+    height: auto;
     margin-right: 10px;
     opacity: 0.5;
     transition: 0.5s;
-    color: rgb(151, 146, 146);
-
 }
 
-.action .menu ul li:hover img{
+.action .menu ul li:hover img {
     opacity: 1;
 }
 
-.action .menu ul li a{
+.action .menu ul li a {
     display: inline-block;
     text-decoration: none;
     color: rgb(151, 146, 146);
     font-weight: 500;
     transition: 0.5s;
-    margin-left: 8px;
-
 }
 
-
-.action .menu ul li:hover a,
-.action .menu ul li:hover i{
-    color: rgb(21,156,180);
+.action .menu ul li:hover a {
+    color: rgb(21, 156, 180);
 }
 
+/* --- 5. MOBILE RESPONSIVENESS --- */
+@media(max-width: 990px) {
+    /* Reset global centering if present */
+    #win div { left: auto; top: auto; }
+
+    .action {
+        right: 20px;
+        bottom: 30px;
+        top: auto !important;
+        left: auto !important;
+    }
+
+    .action .menu {
+        width: 280px;
+        max-width: calc(100vw - 40px);
+        right: 0; /* Keeps it aligned to the right corner */
+    }
+}

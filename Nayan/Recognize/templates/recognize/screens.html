@@ -21,4 +21,158 @@
 
     </section> 
 
+<<<<<<< Updated upstream
+=======
+        #video {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Canvas overlays perfectly on top of video */
+        #canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+        }
+
+        @media (max-width: 768px) {
+            .video-container {
+                max-width: calc(100vw - 20px);
+                margin: 0 auto;
+            }
+            .button-group {
+                flex-direction: column;
+                align-items: center;
+            }
+            .btn-mobile {
+                width: 100%;
+                max-width: 200px;
+                margin-bottom: 0.5rem;
+            }
+            .text-center {
+                padding: 0 10px;
+            }
+        }
+    </style>
+
+    <script>
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const resultDiv = document.getElementById('result');
+    const toggleBtn = document.getElementById('toggleStream');
+    
+    let isStreaming = false;
+    let streamInterval = null;
+    let currentStream = null;
+    let facingMode = 'user';
+
+    // 1. Setup Camera
+    async function startCamera() {
+        try {
+            if (currentStream) currentStream.getTracks().forEach(t => t.stop());
+            
+            const stream = await navigator.mediaDevices.getUserMedia({ 
+                video: { facingMode: facingMode, width: { ideal: 640 }, height: { ideal: 480 } } 
+            });
+            video.srcObject = stream;
+            currentStream = stream;
+            
+            video.onloadedmetadata = () => {
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+            };
+        } catch (err) {
+            resultDiv.innerHTML = `<span class="text-danger">Camera Error: ${err.message}</span>`;
+        }
+    }
+
+    // 2. The Loop: Capture -> Send -> Draw
+    function sendFrame() {
+        if (!isStreaming) return;
+
+        const tempCanvas = document.createElement('canvas');
+        tempCanvas.width = video.videoWidth;
+        tempCanvas.height = video.videoHeight;
+        tempCanvas.getContext('2d').drawImage(video, 0, 0);
+        
+        const imageData = tempCanvas.toDataURL('image/jpeg', 0.7);
+
+        fetch('/app/process_image/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': '{{ csrf_token }}' },
+            body: JSON.stringify({ image: imageData })
+        })
+        .then(res => res.json())
+        .then(data => {
+            // Clear previous drawings
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // --- FIX START: Check for Errors First ---
+            if (data.errors) {
+                resultDiv.innerHTML = `<span class="text-danger fw-bold">${data.errors.error_message}</span>`;
+                return; // Stop here so we don't try to draw boxes
+            }
+            // --- FIX END ---
+
+            if (data.name && data.name !== 'Unknown') {
+                const coords = data.coords;
+                
+                // Set Color
+                let color = '#00FF00'; // Green
+                if (data.category.includes('Criminal')) color = '#FF0000'; // Red
+                if (data.category.includes('Missing')) color = '#FFFF00'; // Yellow
+
+                // Draw Box
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 3;
+                ctx.strokeRect(coords.x, coords.y, coords.w, coords.h);
+
+                // Draw Text Background
+                ctx.fillStyle = color;
+                ctx.fillRect(coords.x, coords.y - 30, coords.w, 30);
+
+                // Draw Name
+                ctx.fillStyle = '#000';
+                ctx.font = 'bold 16px Arial';
+                ctx.fillText(data.name, coords.x + 5, coords.y - 8);
+                
+                resultDiv.innerHTML = `<span style="color:${color}">${data.name} Found!</span>`;
+            } else {
+                // Show "Scanning" if no face/unknown face found (instead of empty)
+                resultDiv.innerHTML = `<span class="text-muted">Scanning...</span>`;
+            }
+        })
+        .catch(err => console.error(err));
+    }
+
+    // 3. Button Logic
+    toggleBtn.addEventListener('click', () => {
+        isStreaming = !isStreaming;
+        if (isStreaming) {
+            toggleBtn.innerHTML = '<i class="fas fa-stop"></i> Stop Stream';
+            toggleBtn.classList.replace('btn-primary', 'btn-danger');
+            streamInterval = setInterval(sendFrame, 500); 
+        } else {
+            toggleBtn.innerHTML = '<i class="fas fa-play"></i> Start Stream';
+            toggleBtn.classList.replace('btn-danger', 'btn-primary');
+            clearInterval(streamInterval);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            resultDiv.innerHTML = ""; // Clear text when stopped
+        }
+    });
+
+    document.getElementById('switchCamera').addEventListener('click', () => {
+        facingMode = facingMode === 'user' ? 'environment' : 'user';
+        startCamera();
+    });
+
+    // Initialize
+    startCamera();
+</script>
+>>>>>>> Stashed changes
 {% endblock %}

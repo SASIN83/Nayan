@@ -1,0 +1,316 @@
+{% extends 'recognize/base.html' %}
+{% block title %}Live Recognition{% endblock %}
+{% load static %}
+
+{% block strapings %}
+<style>
+    /* --- PAGE BACKGROUND --- */
+    .live-page {
+        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        min-height: 100vh;
+        padding-top: 80px;
+        color: white;
+    }
+
+    /* --- GLASS CARD --- */
+    .glass-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        text-align: center;
+    }
+
+    /* --- VIDEO CONTAINER --- */
+    .video-wrapper {
+        position: relative;
+        width: 100%;
+        max-width: 640px;
+        margin: 0 auto 20px auto;
+        border-radius: 15px;
+        overflow: hidden;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    }
+
+    #video {
+        width: 100%;
+        display: block;
+        transform: scaleX(-1); /* Mirror effect */
+    }
+
+    #canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 10;
+    }
+
+    /* --- SCANNER ANIMATION --- */
+    .scanner-line {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: #00f2ff;
+        box-shadow: 0 0 10px #00f2ff;
+        z-index: 5;
+        animation: scan 3s linear infinite;
+        display: none; /* Hidden by default */
+    }
+
+    @keyframes scan {
+        0% { top: 0%; opacity: 0; }
+        10% { opacity: 1; }
+        90% { opacity: 1; }
+        100% { top: 100%; opacity: 0; }
+    }
+
+    /* --- STATUS INDICATOR --- */
+    #status-pill {
+        display: inline-block;
+        padding: 8px 20px;
+        border-radius: 50px;
+        background: rgba(0, 0, 0, 0.5);
+        font-weight: 600;
+        margin-bottom: 20px;
+        font-size: 0.9rem;
+        letter-spacing: 1px;
+    }
+    .status-idle { color: #ccc; border: 1px solid #ccc; }
+    .status-live { color: #00f2ff; border: 1px solid #00f2ff; box-shadow: 0 0 10px rgba(0, 242, 255, 0.3); }
+    .status-error { color: #ff4b4b; border: 1px solid #ff4b4b; }
+
+    /* --- BUTTONS --- */
+    .btn-glow {
+        border-radius: 50px;
+        padding: 12px 30px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    .btn-start {
+        background: linear-gradient(45deg, #11998e, #38ef7d);
+        border: none;
+        color: white;
+    }
+    .btn-start:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(56, 239, 125, 0.4); }
+    
+    .btn-stop {
+        background: linear-gradient(45deg, #cb2d3e, #ef473a);
+        border: none;
+        color: white;
+    }
+    .btn-switch {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    .btn-switch:hover { background: rgba(255, 255, 255, 0.3); }
+
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="live-page">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-8">
+                
+                <div class="glass-card">
+                    <h2 class="mb-2">Real-Time Surveillance</h2>
+                    <div id="status-pill" class="status-idle">
+                        <i class="fas fa-circle"></i> SYSTEM IDLE
+                    </div>
+
+                    <div class="video-wrapper">
+                        <video id="video" autoplay playsinline muted></video>
+                        <canvas id="canvas"></canvas>
+                        <div class="scanner-line" id="scannerLine"></div>
+                    </div>
+
+                    <div class="d-flex justify-content-center gap-3 mt-4">
+                        <button id="switchCamera" class="btn btn-switch btn-glow">
+                            <i class="fas fa-sync-alt"></i> Switch Cam
+                        </button>
+                        <button id="toggleStream" class="btn btn-start btn-glow">
+                            <i class="fas fa-play"></i> Start Scan
+                        </button>
+                    </div>
+
+                    <div id="result-text" class="mt-3 fw-bold fs-5"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // --- DOM ELEMENTS ---
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const toggleBtn = document.getElementById('toggleStream');
+        const statusPill = document.getElementById('status-pill');
+        const scannerLine = document.getElementById('scannerLine');
+        const resultText = document.getElementById('result-text');
+
+        // --- STATE VARIABLES ---
+        let isStreaming = false;
+        let isProcessing = false; // Prevents overlapping requests
+        let currentStream = null;
+        let facingMode = 'user';
+
+        // --- 1. INITIALIZE CAMERA ---
+        async function startCamera() {
+            try {
+                if (currentStream) currentStream.getTracks().forEach(t => t.stop());
+
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { facingMode: facingMode, width: { ideal: 640 }, height: { ideal: 480 } } 
+                });
+                video.srcObject = stream;
+                currentStream = stream;
+
+                video.onloadedmetadata = () => {
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                };
+            } catch (err) {
+                updateStatus("CAMERA ERROR", "error");
+                console.error(err);
+            }
+        }
+
+        // --- 2. INTELLIGENT PROCESSING LOOP ---
+        function processFrame() {
+            if (!isStreaming) return; // Stop if user clicked Stop
+
+            // A. CHECK: Is a request already running?
+            if (isProcessing) {
+                // If yes, wait 100ms and check again (Don't send new request)
+                setTimeout(processFrame, 100); 
+                return;
+            }
+
+            isProcessing = true; // Lock the process
+
+            // B. CAPTURE IMAGE
+            const tempCanvas = document.createElement('canvas');
+            tempCanvas.width = video.videoWidth;
+            tempCanvas.height = video.videoHeight;
+            const tempCtx = tempCanvas.getContext('2d');
+            tempCtx.drawImage(video, 0, 0); // Draw video frame
+            
+            // Compress to JPEG 0.6 (60% quality) to reduce bandwidth
+            const imageData = tempCanvas.toDataURL('image/jpeg', 0.6);
+
+            // C. SEND TO BACKEND
+            fetch('/app/process_image/', {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json', 
+                    'X-CSRFToken': '{{ csrf_token }}' 
+                },
+                body: JSON.stringify({ image: imageData })
+            })
+            .then(res => res.json())
+            .then(data => {
+                // D. HANDLE RESULTS
+                ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear old boxes
+
+                if (data.errors) {
+                    // Handle specific errors like "Too Dark" silently or show subtle text
+                    if(data.errors.error_message.includes('dark')) {
+                        resultText.innerHTML = '<span class="text-warning"><i class="fas fa-sun"></i> Too Dark</span>';
+                    }
+                } 
+                else if (data.name && data.name !== 'Unknown') {
+                    drawBox(data);
+                } else {
+                    resultText.innerHTML = '<span class="text-white-50">Scanning...</span>';
+                }
+            })
+            .catch(err => console.error("Network Error:", err))
+            .finally(() => {
+                // E. UNLOCK & REPEAT
+                isProcessing = false; 
+                // Wait 200ms before next frame to let CPU breathe
+                setTimeout(processFrame, 200); 
+            });
+        }
+
+        // --- 3. DRAWING HELPER ---
+        function drawBox(data) {
+            const coords = data.coords;
+            let color = '#00f2ff'; // Default Cyan
+            let label = "Unknown";
+
+            if (data.category.includes('Criminal')) color = '#ff4b4b'; // Red
+            if (data.category.includes('Missing')) color = '#f1c40f'; // Yellow
+            
+            // Draw Rectangle
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 4;
+            ctx.strokeRect(coords.x, coords.y, coords.w, coords.h);
+
+            // Draw Label BG
+            ctx.fillStyle = color;
+            ctx.fillRect(coords.x, coords.y - 35, coords.w, 35);
+
+            // Draw Text
+            ctx.fillStyle = '#000';
+            ctx.font = 'bold 16px "Segoe UI", sans-serif';
+            ctx.fillText(data.name, coords.x + 10, coords.y - 10);
+
+            // Update Status Text below video
+            resultText.innerHTML = `<span style="color:${color}; text-shadow: 0 0 10px ${color};">${data.name} DETECTED</span>`;
+        }
+
+        // --- 4. UI LOGIC ---
+        function updateStatus(msg, type) {
+            statusPill.innerHTML = `<i class="fas fa-circle"></i> ${msg}`;
+            statusPill.className = ''; // Reset
+            statusPill.classList.add(`status-${type}`);
+        }
+
+        toggleBtn.addEventListener('click', () => {
+            isStreaming = !isStreaming;
+            
+            if (isStreaming) {
+                // Start
+                toggleBtn.innerHTML = '<i class="fas fa-stop"></i> Stop Scan';
+                toggleBtn.classList.replace('btn-start', 'btn-stop');
+                scannerLine.style.display = 'block';
+                updateStatus("SYSTEM LIVE", "live");
+                processFrame(); // Start the loop
+            } else {
+                // Stop
+                toggleBtn.innerHTML = '<i class="fas fa-play"></i> Start Scan';
+                toggleBtn.classList.replace('btn-stop', 'btn-start');
+                scannerLine.style.display = 'none';
+                updateStatus("SYSTEM IDLE", "idle");
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                resultText.innerHTML = "";
+            }
+        });
+
+        document.getElementById('switchCamera').addEventListener('click', () => {
+            facingMode = facingMode === 'user' ? 'environment' : 'user';
+            startCamera();
+        });
+
+        // Init
+        startCamera();
+    });
+</script>
+{% endblock %}

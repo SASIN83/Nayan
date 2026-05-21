@@ -22,36 +22,41 @@ body {
 }
 
 #mainNavbar {
-    font-size: 1.5rem;
-    font-weight: 100;    
+    background-color: #ffffff;
+    font-size: 1.9rem;
+    font-weight: 500;
+    /* Optional: Adds a shadow so the white navbar doesn't blend into a white page */
+    box-shadow: 0 2px 2px rgba(0,0,0,0.1); 
 }
 
+/* 1. FORCE BLACK TEXT */
 #mainNavbar .nav-link {
-    color: #1995F6;
+    padding-left: 30px;
+    transition: color 0.3s ease; /* Makes the color change smooth */
 }
 
+/* 2. FIX: ADD !important TO HOVER TO OVERRIDE THE BLACK */
 #mainNavbar .nav-link:hover {
-    color: #EA1C2C;
+    color: #531cea !important; 
 }
 
 #mainNavbar .navbar-brand {
-    color: #EA1C2C;
+    color: #531cea !important;
     font-size: 1.5rem;
+    font-weight: 700;
 }
 
-#headingGroup span {
-    color: #EA1C2C;
-}
-
-#headingGroup h1 {
-    font-weight: 100;
-    font-size: 4rem;
-}
-
+/* SCROLLED STATE */
 .navbar.scrolled {
-    background: #91b3fa;
+    background: #91b3fa !important; /* Force blue background when scrolled */
     transition: background 500ms;
 }
+
+/* If you want the text to turn White when scrolled (since background is blue) */
+.navbar.scrolled .nav-link {
+    color: rgb(255, 255, 255) !important;
+}
+
 
 @media (max-width: 1200px) {
     #headingGroup h1 {
